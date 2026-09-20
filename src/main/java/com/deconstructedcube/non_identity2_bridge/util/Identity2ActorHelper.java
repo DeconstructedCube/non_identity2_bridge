@@ -5,7 +5,6 @@ import com.nonid.internal.animation.util.EntityVariants;
 import net.Gabou.identity2.api.IdentityApi;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public final class Identity2ActorHelper {
@@ -77,25 +75,7 @@ public final class Identity2ActorHelper {
     public static String getMorphVariant(Entity entity) {
         Entity morph = IdentityApi.getCurrentMorph(entity);
         if (morph != null) {
-            String variant = EntityVariants.resolveVariant(morph);
-            if (variant != null && !variant.isBlank()) {
-                return variant;
-            }
-        }
-        CompoundTag tag = IdentityApi.getCurrentMorphVariant(entity);
-        if (tag != null && !tag.isEmpty()) {
-            Optional<String> variant = tag.getString("variant");
-            if (variant.isPresent() && !variant.get().isBlank()) {
-                return variant.get();
-            }
-            Optional<String> variantCapital = tag.getString("Variant");
-            if (variantCapital.isPresent() && !variantCapital.get().isBlank()) {
-                return variantCapital.get();
-            }
-            Optional<String> type = tag.getString("Type");
-            if (type.isPresent() && !type.get().isBlank()) {
-                return type.get();
-            }
+            return EntityVariants.resolveVariant(morph);
         }
         return null;
     }
@@ -114,41 +94,27 @@ public final class Identity2ActorHelper {
         tags.add("actor.identity2");
         tags.add("actor." + morphId.getPath());
         tags.add("actor." + morphId.getNamespace() + "." + morphId.getPath());
+        tags.add("actor.feral");
 
         Entity morph = IdentityApi.getCurrentMorph(entity);
-        if (morph != null) {
-            tags.add("actor.feral");
-            if (morph instanceof LivingEntity) {
-                tags.add("actor.living");
-            }
-            // 复制生物自身的性别/标签
-            for (String tag : morph.getTags()) {
-                if (tag.startsWith("gender.") || tag.startsWith("actor.")) {
-                    tags.add(tag);
-                }
-            }
+        if (morph instanceof LivingEntity) {
+            tags.add("actor.living");
         }
 
-        // 如果变身未自带显式性别标签，则继承宿主玩家本身的性别标签
-        if (!tags.contains("gender.male") && !tags.contains("gender.female")) {
-            if (entity instanceof GenderHolder genderHolder) {
-                int mask = genderHolder.getGenderMask();
-                if ((mask & 1) != 0) {
-                    tags.add("gender.male");
-                }
-                if ((mask & 2) != 0) {
-                    tags.add("gender.female");
-                }
-            }
-            for (String tag : entity.getTags()) {
-                if (tag.startsWith("gender.")) {
-                    tags.add(tag);
-                }
-            }
-            // 若仍然未设置任何性别，默认提供 male 标签以满足单性别动画约束
-            if (!tags.contains("gender.male") && !tags.contains("gender.female")) {
-                tags.add("gender.male");
-            }
+        // 复用 NoN 原生 GenderHolder 接口解析性别掩码
+        int mask = (entity instanceof GenderHolder holder) ? (holder.getGenderMask() & 3) : 0;
+        if (mask == 0 && morph instanceof GenderHolder morphHolder) {
+            mask = morphHolder.getGenderMask() & 3;
+        }
+
+        if ((mask & 1) != 0) {
+            tags.add("gender.male");
+        }
+        if ((mask & 2) != 0) {
+            tags.add("gender.female");
+        }
+        if (mask == 0) {
+            tags.add("gender.male");
         }
 
         return Set.copyOf(tags);
