@@ -12,9 +12,16 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Identity2ActorHelper {
+
+    private static final Map<TagCacheKey, Set<String>> TAG_CACHE = new ConcurrentHashMap<>();
+
+    private record TagCacheKey(Identifier morphId, int genderMask, boolean isLiving) {
+    }
 
     private Identity2ActorHelper() {
     }
@@ -89,24 +96,33 @@ public final class Identity2ActorHelper {
             return Set.of();
         }
 
+        Entity morph = IdentityApi.getCurrentMorph(entity);
+        boolean isLiving = morph instanceof LivingEntity;
+
+        int mask = (entity instanceof GenderHolder holder) ? (holder.getGenderMask() & 3) : 0;
+        if (mask == 0 && morph instanceof GenderHolder morphHolder) {
+            mask = morphHolder.getGenderMask() & 3;
+        }
+
+        TagCacheKey key = new TagCacheKey(morphId, mask, isLiving);
+        return TAG_CACHE.computeIfAbsent(key, Identity2ActorHelper::buildMorphTags);
+    }
+
+    private static Set<String> buildMorphTags(TagCacheKey key) {
         LinkedHashSet<String> tags = new LinkedHashSet<>();
+        Identifier morphId = key.morphId();
+
         tags.add("actor.morph");
         tags.add("actor.identity2");
         tags.add("actor." + morphId.getPath());
         tags.add("actor." + morphId.getNamespace() + "." + morphId.getPath());
         tags.add("actor.feral");
 
-        Entity morph = IdentityApi.getCurrentMorph(entity);
-        if (morph instanceof LivingEntity) {
+        if (key.isLiving()) {
             tags.add("actor.living");
         }
 
-        // 复用 NoN 原生 GenderHolder 接口解析性别掩码
-        int mask = (entity instanceof GenderHolder holder) ? (holder.getGenderMask() & 3) : 0;
-        if (mask == 0 && morph instanceof GenderHolder morphHolder) {
-            mask = morphHolder.getGenderMask() & 3;
-        }
-
+        int mask = key.genderMask();
         if ((mask & 1) != 0) {
             tags.add("gender.male");
         }

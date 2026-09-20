@@ -19,12 +19,6 @@ public abstract class ServerAnimationControllerMixin {
             )
     )
     private static EntityType<?> non_identity2_bridge$redirectResolveModelRootsEntityType(Entity actor) {
-        if (actor != null && Identity2ActorHelper.isMorphed(actor)) {
-            EntityType<?> morphType = Identity2ActorHelper.getMorphEntityType(actor);
-            if (morphType != null) {
-                return morphType;
-            }
-        }
-        return actor == null ? null : actor.getType();
+        return Identity2ActorHelper.getEffectiveEntityType(actor);
     }
 }

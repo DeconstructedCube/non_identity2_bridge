@@ -20,13 +20,7 @@ public abstract class MatchActorMixin {
             )
     )
     private static EntityType<?> non_identity2_bridge$redirectMatchActorEntityType(Entity entity) {
-        if (Identity2ActorHelper.isMorphed(entity)) {
-            EntityType<?> morphType = Identity2ActorHelper.getMorphEntityType(entity);
-            if (morphType != null) {
-                return morphType;
-            }
-        }
-        return entity.getType();
+        return Identity2ActorHelper.getEffectiveEntityType(entity);
     }
 
     @Redirect(
@@ -51,9 +45,6 @@ public abstract class MatchActorMixin {
             )
     )
     private static boolean non_identity2_bridge$redirectMatchActorIsBaby(LivingEntity living) {
-        if (Identity2ActorHelper.isMorphed(living)) {
-            return Identity2ActorHelper.isMorphBaby(living);
-        }
-        return living.isBaby();
+        return Identity2ActorHelper.isEffectiveBaby(living);
     }
 }
