@@ -5,10 +5,14 @@
 	"mixins": [
 		"MatchActorMixin",
 		"ServerAnimationControllerMixin",
-		"EntityVariantsMixin"
+		"EntityVariantsMixin",
+		"AnimationDefinitionsMixin",
+		"NonMobEntityEnergyMixin",
+		"NonPlayerInteractionSystemMixin"
 	],
 	"client": [
-		"client.EntityRenderDispatcherMixin"
+		"client.EntityRenderDispatcherMixin",
+		"client.NoNEntityRenderManagerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
