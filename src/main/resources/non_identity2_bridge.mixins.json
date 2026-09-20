@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "com.deconstructedcube.non_identity2_bridge.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"MatchActorMixin",
+		"ServerAnimationControllerMixin",
+		"EntityVariantsMixin"
+	],
+	"client": [
+		"client.EntityRenderDispatcherMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
