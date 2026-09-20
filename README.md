@@ -13,15 +13,15 @@ An ultra-lightweight, non-invasive Fabric compatibility bridge between **Needs o
 ## 📖 Overview & Problem Statement
 
 In an unbridged environment, when a player morphs into an animal (such as a Wolf, Cat, Fox, Bee, etc.) via **Identity2** and interacts with another player:
-1. **Role Mismatch**: NoN queries raw entity types (`minecraft:player`) during animation candidate matching, causing the right-click interaction menu to only match human player animations instead of animal roles.
-2. **Missing Animal Candidate Entries**: Animal-specific animation roles defined in NoN animation packs cannot be triggered because the player's active morph identity is ignored during matching.
-3. **Geometry Negotiation Desync**: The server broadcasts default player model roots instead of the corresponding animal GeckoLib model roots to clients.
+1. **Model Reversion & T-Pose Freeze**: NoN client-side render pipeline queries the raw entity type (`minecraft:player`). It loads the default human GeckoLib model (`player.m.geo.json`) during animal animations. Because the human model lacks animal bone keyframes, the player's limbs remain frozen at default rotations (T-Pose / standing freeze).
+2. **Texture UV Misalignment**: NoN forces the player's 64x64 human skin onto the animal geometry, corrupting the UV mapping.
+3. **Role Slot Mismatch**: NoN server-side candidate matching ignores the player's active morph identity, causing right-click menus to only list human interactions.
 
 ### The Solution
-This bridge connects NoN's actor matching and server model broadcasting pipelines with zero invasive client overrides:
-- **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations without introducing duplicate files or extra render layers.
-- **Direct Live Instance Detection**: Checks the live morph entity instance from Identity2 (`IdentityApi.getCurrentMorph`) rather than depending on unsynced NBT tags.
-- **Minimal Non-Invasive Footprint**: Comprises only 2 targeted redirects on the server and data layer, with zero fragile client-side mixin-on-mixins.
+This bridge coordinates NoN's actor matching, server broadcasting, and client render pipelines:
+- **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations (`wolf.m.geo.json`, etc.) without introducing duplicate assets.
+- **Accurate Model & Texture Resolution**: Directs NoN's client render state to load matching animal geometry and textures, eliminating T-Pose freezes, UV distortions, and form reversions.
+- **Direct Live Instance Detection**: Evaluates the live morph entity from Identity2 (`IdentityApi.getCurrentMorph`) on both client and server sides.
 - **Strict Quality Control**: Enforced with automated compiler-level static analysis (`-Xlint:all -Werror`) and Checkstyle validation on every build.
 
 ---
@@ -39,7 +39,11 @@ This bridge connects NoN's actor matching and server model broadcasting pipeline
             │                     and inherits gender tags to satisfy definition constraints
             ▼
  3. Server Model Negotiation ───► Broadcasts matching animal GeckoLib model roots
-                                  to clients via ServerAnimationController
+            │                     to clients via ServerAnimationController
+            ▼
+ 4. Client Model & UV Takeover ─► Injects morphed EntityType into NoN render state
+                                  and suppresses human skin override, ensuring proper animal
+                                  GeckoLib models and textures are loaded!
 ```
 
 ---
@@ -69,7 +73,7 @@ cd non_identity2_bridge
 ./gradlew build
 ```
 
-The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.3+1.21.11.jar`.
+The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.4+1.21.11.jar`.
 
 ---
 

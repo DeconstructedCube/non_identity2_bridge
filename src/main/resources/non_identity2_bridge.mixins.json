@@ -6,6 +6,10 @@
 		"MatchActorMixin",
 		"ServerAnimationControllerMixin"
 	],
+	"client": [
+		"client.NoNEntityRenderManagerMixin",
+		"client.GeckoReplacedRenderMixin"
+	],
 	"injectors": {
 		"defaultRequire": 1
 	}
