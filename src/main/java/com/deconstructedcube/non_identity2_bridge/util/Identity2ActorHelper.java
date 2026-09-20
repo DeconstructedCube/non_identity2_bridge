@@ -10,9 +10,16 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Identity2ActorHelper {
+
+    private record TagCacheKey(EntityType<?> type, int genderMask, boolean isLiving) {
+    }
+
+    private static final Map<TagCacheKey, Set<String>> TAG_CACHE = new ConcurrentHashMap<>();
 
     private Identity2ActorHelper() {
     }
@@ -41,19 +48,27 @@ public final class Identity2ActorHelper {
             return Set.of();
         }
 
-        Identifier morphId = BuiltInRegistries.ENTITY_TYPE.getKey(morph.getType());
+        EntityType<?> morphType = morph.getType();
+        int mask = (entity instanceof GenderHolder holder) ? (holder.getGenderMask() & 3) : 0;
+        boolean isLiving = morph instanceof LivingEntity;
+        TagCacheKey key = new TagCacheKey(morphType, mask, isLiving);
+        return TAG_CACHE.computeIfAbsent(key, Identity2ActorHelper::buildMorphActorTags);
+    }
+
+    private static Set<String> buildMorphActorTags(TagCacheKey key) {
+        Identifier morphId = BuiltInRegistries.ENTITY_TYPE.getKey(key.type());
         LinkedHashSet<String> tags = new LinkedHashSet<>();
         tags.add("actor.morph");
         tags.add("actor.feral");
         tags.add("actor." + morphId.getPath());
         tags.add("actor." + morphId.getNamespace() + "." + morphId.getPath());
 
-        if (morph instanceof LivingEntity) {
+        if (key.isLiving()) {
             tags.add("actor.living");
         }
 
         // 继承性别标签，以满足动画的角色性别约束
-        int mask = (entity instanceof GenderHolder holder) ? (holder.getGenderMask() & 3) : 0;
+        int mask = key.genderMask();
         if ((mask & 1) != 0) {
             tags.add("gender.male");
         }

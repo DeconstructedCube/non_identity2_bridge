@@ -6,7 +6,7 @@
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://adoptium.net/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An ultra-lightweight, non-invasive Fabric compatibility bridge between **Needs of Nature (NoN)** and **Identity2** on Minecraft 1.21.11.
+An ultra-lightweight, high-performance Fabric compatibility bridge between **Needs of Nature (NoN)** and **Identity2** on Minecraft 1.21.11.
 
 ---
 
@@ -14,15 +14,16 @@ An ultra-lightweight, non-invasive Fabric compatibility bridge between **Needs o
 
 In an unbridged environment, when a player morphs into an animal (such as a Wolf, Cat, Fox, Bee, etc.) via **Identity2** and interacts with another player:
 1. **Model Reversion & T-Pose Freeze**: NoN client-side render pipeline queries the raw entity type (`minecraft:player`). It loads the default human GeckoLib model (`player.m.geo.json`) during animal animations. Because human bones lack keyframes in animal animations, the player's limbs remain frozen at default rotations (T-Pose / standing freeze).
-2. **Texture UV Misalignment**: NoN forces the player's 64x64 human skin onto the animal geometry, corrupting the UV mapping.
+2. **Texture UV Misalignment & Reflection Overhead**: NoN forces the player's 64x64 human skin onto the animal geometry, corrupting the UV mapping and causing unnecessary reflection calls every frame.
 3. **Role Slot Mismatch**: NoN server-side candidate matching ignores the player's active morph identity, causing right-click menus to only match human interactions.
 
 ### The Solution
 This bridge coordinates NoN's actor matching, server broadcasting, and client render pipelines:
 - **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations (`wolf.m.geo.json`, etc.) without introducing duplicate assets.
-- **Strict Fabric Mixin Compliance (Zero Mixin-on-Mixin)**: Adheres strictly to Fabric Sponge Mixin standards by exclusively intercepting vanilla classes (`EntityRenderDispatcher`) and standard public classes, completely avoiding illegal nested mixins.
-- **Accurate Model & Texture Resolution**: Directs NoN's client render state to load matching animal geometry and textures, eliminating T-Pose freezes, UV distortions, and form reversions.
-- **Direct Live Instance Detection**: Evaluates the live morph entity from Identity2 (`IdentityApi.getCurrentMorph`) on both client and server sides.
+- **Zero-Allocation Actor Tag Cache**: Eliminates heap churn and GC pauses during per-tick candidate scanning by caching immutable tag sets per morph type and gender.
+- **Fast Texture Interception (No Reflection)**: Bypasses expensive vanilla renderer reflection calls, instantly returning `null` to ensure pristine animal fallback textures (`wolf.png`, etc.) without UV tearing.
+- **Strict Fabric Mixin Compliance (Zero Mixin-on-Mixin)**: Adheres strictly to Fabric Sponge Mixin standards by exclusively intercepting vanilla classes (`EntityRenderDispatcher`) and standard public classes with deterministic mixin ordering (`priority = 1500`).
+- **Entity Variant Resolution**: Passes the live morph entity into NoN's variant resolver to support mob variants (e.g. Slime sizes).
 
 ---
 
@@ -32,17 +33,20 @@ This bridge coordinates NoN's actor matching, server broadcasting, and client re
 [Morphed Player (Identity2)]
             │
             ▼
- 1. MatchActor Redirection ─────► Redirects entity.getType() and isBaby() in
-            │                     AnimationDefinitions$MatchActor to the live morph entity
+ 1. MatchActor Redirection ─────► Redirects entity.getType(), isBaby(), and
+            │                     EntityVariants.resolveVariant() to the live morph entity
             ▼
- 2. Dynamic Actor Tags ─────────► Injects actor.morph, actor.feral, species tags,
-            │                     and inherits gender tags to satisfy definition constraints
+ 2. Zero-Allocation Tags ───────► Resolves actor tags with high-performance concurrent cache;
+            │                     injects actor.morph, actor.feral, and inherits gender tags
             ▼
  3. Server Model Negotiation ───► Broadcasts matching animal GeckoLib model roots
             │                     to clients via ServerAnimationController
             ▼
- 4. Vanilla Dispatcher Hook ────► Injects into net.minecraft.client.renderer.entity.EntityRenderDispatcher
-                                  to attach morph ID and re-prepare GeckoReplacedRender cleanly!
+ 4. Priority Dispatcher Hook ───► Injects into EntityRenderDispatcher (priority = 1500)
+            │                     to attach morph ID and re-prepare GeckoReplacedRender cleanly
+            ▼
+ 5. Fast Texture Fallback ──────► Intercepts resolveVanillaTexture at HEAD, skipping reflection
+                                  and ensuring native animal textures apply accurately!
 ```
 
 ---
@@ -72,7 +76,7 @@ cd non_identity2_bridge
 ./gradlew build
 ```
 
-The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.6+1.21.11.jar`.
+The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.7+1.21.11.jar`.
 
 ---
 
