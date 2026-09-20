@@ -7,7 +7,7 @@
 		"ServerAnimationControllerMixin"
 	],
 	"client": [
-		"client.NoNEntityRenderManagerMixin",
+		"client.EntityRenderDispatcherMixin",
 		"client.GeckoReplacedRenderMixin"
 	],
 	"injectors": {
