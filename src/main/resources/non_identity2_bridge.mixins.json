@@ -4,14 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"MatchActorMixin",
-		"ServerAnimationControllerMixin",
-		"EntityVariantsMixin",
-		"AnimationDefinitionsMixin",
-		"NonMobEntityEnergyMixin",
-		"NonPlayerInteractionSystemMixin"
-	],
-	"client": [
-		"client.NoNEntityRenderManagerMixin"
+		"ServerAnimationControllerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
