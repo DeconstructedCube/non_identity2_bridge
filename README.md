@@ -81,7 +81,7 @@ cd non_identity2_bridge
 ./gradlew build
 ```
 
-The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.1.1+1.21.11.jar`.
+The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.1.2+1.21.11.jar`.
 
 ---
 
