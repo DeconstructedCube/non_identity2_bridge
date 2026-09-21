@@ -1,7 +1,7 @@
 package com.deconstructedcube.non_identity2_bridge.mixin.client;
 
+import com.deconstructedcube.non_identity2_bridge.client.Identity2ClientActorHelper;
 import com.deconstructedcube.non_identity2_bridge.util.Identity2ActorHelper;
-import com.nonid.internal.animation.client.render.AnimationRenderStateAccess;
 import com.nonid.internal.animation.client.render.gecko.GeckoReplacedRender;
 import com.nonid.internal.animation.util.EntityVariants;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -27,19 +27,14 @@ public abstract class GeckoReplacedRenderMixin {
             LivingEntityRenderState renderState,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        Identifier entityTypeId = null;
-        if (renderState instanceof AnimationRenderStateAccess access) {
-            entityTypeId = access.afw$getEntityTypeId();
-        }
-
-        boolean isNonPlayerRole = entityTypeId != null && !Identity2ActorHelper.PLAYER_TYPE_ID.equals(entityTypeId);
         Entity morph = Identity2ActorHelper.getMorph(entity);
-
-        // 核心准则：非人类角色绝对禁止赋予玩家皮肤！
-        // 自动将变身形态委派给原版渲染管线提取原生贴图（支持变种与材质包），无需任何手动路径硬编码
-        if (isNonPlayerRole || morph != null) {
-            Identifier nativeTexture = morph != null ? Identity2ActorHelper.resolveMorphNativeTexture(morph) : null;
-            cir.setReturnValue(nativeTexture);
+        // 核心修复：仅当实体确实处于变身形态时才介入接管贴图提取！
+        // 普通实体（自然生成的牛、狼、羊等）直接放行给 NoN 自带的原生贴图管线处理。
+        if (morph != null) {
+            Identifier nativeTexture = Identity2ClientActorHelper.resolveMorphNativeTexture(morph, renderState);
+            if (nativeTexture != null) {
+                cir.setReturnValue(nativeTexture);
+            }
         }
     }
 
