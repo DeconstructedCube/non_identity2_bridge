@@ -1,5 +1,7 @@
 package com.deconstructedcube.non_identity2_bridge.client;
 
+import com.nonid.internal.animation.client.runtime.ClientAnimationRuntime;
+import com.nonid.internal.animation.network.AnimationStageInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -14,6 +16,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public final class Identity2ClientActorHelper {
@@ -60,6 +64,44 @@ public final class Identity2ClientActorHelper {
         } catch (Throwable ignored) {
         }
 
+        return null;
+    }
+
+    public static double resolveAuthoredTimelineSeconds(@Nullable UUID instanceId, float tickDelta) {
+        if (instanceId == null) {
+            return 0.0;
+        }
+        ClientAnimationRuntime.StageTimelineSnapshot timeline = ClientAnimationRuntime.findStageTimeline(instanceId);
+        if (timeline == null) {
+            return 0.0;
+        }
+        AnimationStageInfo stage = ClientAnimationRuntime.findCurrentStage(instanceId);
+        Minecraft client = Minecraft.getInstance();
+        long now = (client != null && client.level != null) ? client.level.getGameTime() : 0;
+        double speed = timeline.speed() > 0 ? timeline.speed() : 1.0;
+        double elapsedTicks = Math.max(0.0, ((now + Math.max(0.0f, tickDelta)) - timeline.stageStartTick()) * speed);
+        if (stage != null && stage.loop()) {
+            double cycleTicks = stage.cycleTicks() > 0 ? stage.cycleTicks() : (double) stage.lengthTicks();
+            if (cycleTicks > 0.0) {
+                elapsedTicks = elapsedTicks % cycleTicks;
+            }
+        }
+        return elapsedTicks / 20.0;
+    }
+
+    @Nullable
+    public static String conjoinedStageKey(@Nullable String animationPath) {
+        if (animationPath == null || animationPath.isEmpty()) {
+            return null;
+        }
+        int marker = animationPath.lastIndexOf(".p");
+        if (marker >= 0 && marker + 1 < animationPath.length()) {
+            return animationPath.substring(marker + 1);
+        }
+        int slash = animationPath.lastIndexOf('/');
+        if (slash >= 0 && slash + 1 < animationPath.length()) {
+            return animationPath.substring(slash + 1);
+        }
         return null;
     }
 }
