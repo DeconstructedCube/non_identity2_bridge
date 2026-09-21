@@ -6,82 +6,49 @@
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://adoptium.net/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An ultra-lightweight, high-performance Fabric compatibility bridge between **Needs of Nature (NoN)** and **Identity2** on Minecraft 1.21.11.
+A Fabric compatibility layer between **Needs of Nature (NoN)** and **Identity2**.
 
----
+## Technical Details
 
-## 📖 Overview & Problem Statement
+This bridge resolves conflicts between NoN's player-centric animation and rendering assumptions and Identity2's morph mechanics:
 
-1. **Model Reversion & Interaction Mismatch**: NoN queries the underlying entity type as `minecraft:player`. You cannot trigger animal animations from menus, and entering an animation reverts you back into human form.
-2. **Human Skin Corruption & Missing Texture Blocks**: Because a morphed player is still an instance of `Player` in Java, NoN's built-in render resolver aggressively forces the player's 64x64 human skin onto the animal 3D model and applies human skin cube-hiding logic, causing animals (Fox, Wolf, Cow, Sheep, etc.) to be covered in human skins and genitalia/ears to turn into purple-black missing texture checkerboards.
-3. **Animation Freezing on Multi-Actor Actions**: In conjoined actions (e.g. `foxmplayer`, `mwolf_fox_doggy_a_00`, `cow_x_f_human`), NoN assigns human player animation clips (`p1_player`) instead of dedicated animal clips (`p1_fox`, `p1_wolf`, `p1_cow`), causing bone name mismatches that freeze the animal model in a motionless state.
-4. **Camera Rotation Drift**: Because Identity2 syncs the player's live mouse yaw to the morph entity every frame, turning the camera during an animation causes the animal model to spin along with the camera view.
-5. **Animal Variants & Texture Packs**: Vanilla 1.21.11 features extensive mob variants (9 wolf biome variants, cat breeds, dyed sheep, etc.) alongside custom resource packs that standard hardcoded fallback paths fail to reflect.
+- **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to return the morph's data instead of `minecraft:player`. This ensures NoN assigns animal animation clips (e.g., `p1_fox`) instead of human clips during multi-actor animations.
+- **Texture Resolution**: Reuses NoN's `RenderState` and utilizes generic type erasure via `LivingEntityRenderer` to extract vanilla morph textures (including variants and resource packs) without reflection.
+- **Render State Correction**: Bypasses NoN's `resolveDestroyedSkinBaseTexture` and skin-part cube-hiding for morphed players, preventing human textures from being mapped onto animal models.
+- **Orientation Lock**: Locks `bodyRot`, `yRot`, and `xRot` on the client render state to the animation's anchor orientation, preventing the model from rotating with the camera.
+- **Actor Tags Cache**: Implements a concurrent cache for morph actor tags (`actor.morph`, `actor.feral`, gender traits) to prevent allocation overhead during tick scans.
+- **Mixin Compliance**: Targets standard Minecraft classes and public classes with deterministic ordering (`priority = 1500`) to minimize mixin conflicts.
 
-### The Solution
-This bridge coordinates NoN's actor matching, server broadcasting, and client render pipelines:
-- **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations (`wolf.m.geo.json`, `fox.m.geo.json`, etc.) without introducing duplicate assets.
-- **Complete Morph De-Humanization**: Intercepts NoN's client-side `resolveDestroyedSkinBaseTexture` and `resolvePlayerSkinPartHiddenCubeIndices` pipelines, completely preventing human skin overwrites and cube-hiding artifacts on animal morphs.
-- **Seamless Animal Animation Clip Binding**: Ensures morphed players cleanly map to their true animal animation tracks (`p1_fox`, `p1_cow`, etc.), eliminating animation freezing.
-- **Orientation Lock During Animation**: Locks `bodyRot`, `yRot`, and `xRot` to the animation's anchor orientation on the client render state, completely preventing the animal model from spinning when turning the camera.
-- **Dynamic 1.21.11 Animal Variants & Resource Pack Support**: Resolves textures directly through the morph's vanilla `LivingEntityRenderer` pipeline, preserving all 9 wolf variants, cat breeds, tamed collars, dyed sheep, and active resource pack overrides.
-- **Zero-Allocation Actor Tag Cache**: Eliminates heap churn and GC pauses during per-tick candidate scanning by caching immutable tag sets per morph type and gender.
-- **Strict Fabric Mixin Compliance**: Exclusively targets standard Minecraft classes (`EntityRenderDispatcher`) and public classes with deterministic ordering (`priority = 1500`), avoiding nested mixin issues.
----
+## Architecture Pipeline
 
-## 🛠️ Architecture & How It Works
-
+```mermaid
+graph TD
+    Player[Morphed Player] --> |MatchActorMixin| Type[Redirect Entity Type & Variant]
+    Type --> |Identity2ActorHelper| Tags[Inject Actor Tags Cache]
+    Tags --> |ServerAnimationController| Broadcast[Broadcast Animal GeckoLib Model]
+    Broadcast --> |EntityRenderDispatcherMixin| Orientation[Lock Animation Orientation]
+    Orientation --> |Identity2ClientActorHelper| Texture[Resolve Native Morph Texture]
+    Texture --> |NeedsOfNatureClientMixin| Render[Bypass Human Skin Overrides]
 ```
-[Morphed Player (Identity2)]
-            │
-            ▼
- 1. MatchActor Redirection ─────► Redirects entity.getType(), isBaby(), and
-            │                     EntityVariants.resolveVariant() to the live morph entity
-            ▼
- 2. Zero-Allocation Tags ───────► Resolves actor tags with high-performance concurrent cache;
-            │                     injects actor.morph, actor.feral, and inherits gender tags
-            ▼
- 3. Server Model Negotiation ───► Broadcasts matching animal GeckoLib model roots
-            │                     to clients via ServerAnimationController
-            ▼
- 4. Orientation & Render Hook ──► Injects into EntityRenderDispatcher (priority = 1500)
-            │                     to lock bodyRot/yRot to animation angles and re-prepare GeckoLib
-            ▼
- 5. Dynamic Variant Texture ────► Resolves actual animal variant/resource pack texture via
-                                  the morph's LivingEntityRenderer, filtering out human skins!
-            │
-            ▼
- 6. Morph De-Humanization ──────► Bypasses NoN's human player skin override & cube-hiding,
-                                  preventing corrupted human skins and purple-black genitalia!
-
 ---
 
 ## 📦 Requirements
 
-| Dependency | Minimum Version | Type |
-|---|---|---|
+| Component | Minimum Version | Note |
+| :--- | :--- | :--- |
 | **Minecraft** | `~1.21.11` | Fabric Environment |
-| **Fabric Loader** | `>=0.18.2` | Mod Loader |
-| **Fabric API** | Compatible release | Required |
-| **Needs of Nature (NoN)** | `>=1.5.0` | **Hard Dependency** |
-| **Identity2** | `>=2.2.0` | **Hard Dependency** |
+| **Fabric Loader** | `>=0.18.2` | |
+| **Needs of Nature (NoN)** | `>=1.5.0` | Required |
+| **Identity2** | `>=2.2.0` | Required |
 
 ---
 
 ## 🚀 Building from Source
-
-To compile the mod from source code:
-
 ```bash
-# Clone the repository
 git clone https://github.com/DeconstructedCube/non_identity2_bridge.git
 cd non_identity2_bridge
-
-# Execute automated static analysis, code style checks, and build
 ./gradlew build
 ```
-
-The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.1.2+1.21.11.jar`.
 
 ---
 
