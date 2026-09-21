@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class Identity2ActorHelper {
 
+    public static final Identifier PLAYER_TYPE_ID = Identifier.withDefaultNamespace("player");
+
     private record TagCacheKey(EntityType<?> type, int genderMask, boolean isLiving) {
     }
 
@@ -35,12 +37,36 @@ public final class Identity2ActorHelper {
 
     @Nullable
     public static Entity getMorph(@Nullable Entity entity) {
-        return entity == null ? null : IdentityApi.getCurrentMorph(entity);
+        if (entity == null) {
+            return null;
+        }
+        Entity morph = IdentityApi.getCurrentMorph(entity);
+        if (morph != null) {
+            return morph;
+        }
+        Identifier morphId = IdentityApi.getCurrentMorphId(entity);
+        if (morphId != null && !PLAYER_TYPE_ID.equals(morphId)) {
+            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(morphId).orElse(null);
+            if (type != null && entity.level() != null) {
+                return type.create(entity.level(), net.minecraft.world.entity.EntitySpawnReason.LOAD);
+            }
+        }
+        return null;
     }
 
     public static EntityType<?> getEffectiveEntityType(Entity entity) {
         Entity morph = getMorph(entity);
-        return morph != null ? morph.getType() : entity.getType();
+        if (morph != null) {
+            return morph.getType();
+        }
+        Identifier morphId = IdentityApi.getCurrentMorphId(entity);
+        if (morphId != null && !PLAYER_TYPE_ID.equals(morphId)) {
+            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(morphId).orElse(null);
+            if (type != null) {
+                return type;
+            }
+        }
+        return entity.getType();
     }
 
     public static boolean isEffectiveBaby(LivingEntity living) {
@@ -52,14 +78,14 @@ public final class Identity2ActorHelper {
     }
 
     public static Set<String> provideMorphActorTags(Entity entity) {
-        Entity morph = getMorph(entity);
-        if (morph == null) {
+        EntityType<?> morphType = getEffectiveEntityType(entity);
+        if (morphType == EntityType.PLAYER) {
             return Set.of();
         }
 
-        EntityType<?> morphType = morph.getType();
         int mask = (entity instanceof GenderHolder holder) ? (holder.getGenderMask() & 3) : 0;
-        boolean isLiving = morph instanceof LivingEntity;
+        Entity morph = getMorph(entity);
+        boolean isLiving = morph instanceof LivingEntity || entity instanceof LivingEntity;
         TagCacheKey key = new TagCacheKey(morphType, mask, isLiving);
         return TAG_CACHE.computeIfAbsent(key, Identity2ActorHelper::buildMorphActorTags);
     }
@@ -76,7 +102,6 @@ public final class Identity2ActorHelper {
             tags.add("actor.living");
         }
 
-        // 继承性别标签，以满足动画的角色性别约束
         int mask = key.genderMask();
         if ((mask & 1) != 0) {
             tags.add("gender.male");
@@ -92,15 +117,12 @@ public final class Identity2ActorHelper {
     }
 
     /**
-     * 提取变身生物的原生材质（完美支持 1.21.11 动物变种与材质包覆盖）。
+     * 自动通过原版动物渲染器提取变身生物的原生材质。
+     * 全自动支持 1.21.11 变种与材质包，零生物硬编码。
      */
     @Nullable
-    public static Identifier resolveMorphedTexture(@Nullable Entity entity, @Nullable LivingEntityRenderState renderState) {
-        if (entity == null) {
-            return null;
-        }
-        Entity morph = getMorph(entity);
-        if (morph == null) {
+    public static Identifier resolveMorphNativeTexture(Entity morph) {
+        if (!(morph instanceof LivingEntity livingMorph)) {
             return null;
         }
 
@@ -113,39 +135,19 @@ public final class Identity2ActorHelper {
             return null;
         }
 
-        // 1. 优先从已经提取好的动物变种 RenderState（如 WolfRenderState, CatRenderState）中提取
-        if (renderState != null && !(renderState instanceof AvatarRenderState)) {
-            try {
-                EntityRenderer<?, ?> renderer = dispatcher.getRenderer(renderState);
-                if (renderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer) {
-                    Method method = findTextureLocationMethod(livingRenderer.getClass());
-                    if (method != null) {
-                        Object result = method.invoke(livingRenderer, renderState);
-                        if (result instanceof Identifier textureId && isNonPlayerTexture(textureId)) {
-                            return textureId;
-                        }
+        try {
+            EntityRenderer<?, ?> renderer = dispatcher.getRenderer(livingMorph);
+            if (renderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer && !(renderer instanceof AvatarRenderer)) {
+                EntityRenderState tempState = extractMorphRenderState(livingRenderer, livingMorph, 0.0f);
+                Method method = findTextureLocationMethod(livingRenderer.getClass());
+                if (method != null) {
+                    Object result = method.invoke(livingRenderer, tempState);
+                    if (result instanceof Identifier textureId && isNonPlayerTexture(textureId)) {
+                        return textureId;
                     }
                 }
-            } catch (Throwable ignored) {
             }
-        }
-
-        // 2. 次选：直接从活体变身实体实例提取其原生渲染状态与变种贴图（支持 9 种狼、11 种猫、雪狐、16 色羊等变种与材质包）
-        if (morph instanceof LivingEntity livingMorph) {
-            try {
-                EntityRenderer<?, ?> morphRenderer = dispatcher.getRenderer(livingMorph);
-                if (morphRenderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer) {
-                    EntityRenderState tempState = extractMorphRenderState(morphRenderer, livingMorph, 0.0f);
-                    Method method = findTextureLocationMethod(livingRenderer.getClass());
-                    if (method != null) {
-                        Object result = method.invoke(livingRenderer, tempState);
-                        if (result instanceof Identifier textureId && isNonPlayerTexture(textureId)) {
-                            return textureId;
-                        }
-                    }
-                }
-            } catch (Throwable ignored) {
-            }
+        } catch (Throwable ignored) {
         }
 
         return null;
@@ -156,11 +158,11 @@ public final class Identity2ActorHelper {
         return ((EntityRenderer<T, EntityRenderState>) renderer).createRenderState((T) entity, tickProgress);
     }
 
-    private static boolean isNonPlayerTexture(Identifier id) {
+    public static boolean isNonPlayerTexture(Identifier id) {
         if (id == null) {
             return false;
         }
-        String path = id.getPath();
+        String path = id.getPath().toLowerCase(java.util.Locale.ROOT);
         return !path.contains("skin") && !path.startsWith("textures/entity/player/");
     }
 

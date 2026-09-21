@@ -67,6 +67,7 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.compilerArgs << "-Xlint:all"
 	it.options.compilerArgs << "-Werror"
 	it.options.compilerArgs << "-Xlint:-processing"
+	it.options.compilerArgs << "-Xlint:-classfile"
 }
 
 // 自动静态分析挂载：任何日常编译或打包（compileJava / jar / assemble / build）均自动强制执行静态分析检查
