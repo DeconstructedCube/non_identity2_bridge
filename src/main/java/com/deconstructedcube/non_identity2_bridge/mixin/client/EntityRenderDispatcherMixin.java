@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +42,23 @@ public abstract class EntityRenderDispatcherMixin {
                     if (ClientAnimationRuntime.hasActiveInstances()
                             && ClientAnimationRuntime.isActorActive(entity.getUUID())
                             && !ClientAnimationRuntime.isActorUsingSimplifiedPresentation(entity.getUUID())) {
+
+                        // 锁定身体和头部朝向，彻底杜绝转动鼠标时动物模型随视角旋转
+                        ClientAnimationRuntime.LockedOrientation locked = ClientAnimationRuntime.getLockedOrientation(entity.getUUID());
+                        if (locked != null) {
+                            livingState.bodyRot = locked.bodyYaw();
+                            livingState.yRot = Mth.wrapDegrees(locked.headYaw() - locked.bodyYaw());
+                            livingState.xRot = locked.pitch();
+                        }
+
                         GeckoReplacedRender.prepare(living, livingState, tickDelta);
+
+                        // 确保 prepare 或 fillRenderState 之后，朝向依然被严格锁定
+                        if (locked != null) {
+                            livingState.bodyRot = locked.bodyYaw();
+                            livingState.yRot = Mth.wrapDegrees(locked.headYaw() - locked.bodyYaw());
+                            livingState.xRot = locked.pitch();
+                        }
                     }
                 }
             }

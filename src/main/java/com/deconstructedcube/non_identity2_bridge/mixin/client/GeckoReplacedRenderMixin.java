@@ -21,13 +21,14 @@ public abstract class GeckoReplacedRenderMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$suppressPlayerSkinForMorphedAnimal(
+    private static void non_identity2_bridge$resolveMorphedAnimalTexture(
             LivingEntity entity,
             LivingEntityRenderState renderState,
             CallbackInfoReturnable<Identifier> cir
     ) {
         if (Identity2ActorHelper.getMorph(entity) != null) {
-            cir.setReturnValue(null);
+            Identifier texture = Identity2ActorHelper.resolveMorphedTexture(entity, renderState);
+            cir.setReturnValue(texture);
         }
     }
 

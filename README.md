@@ -12,18 +12,18 @@ An ultra-lightweight, high-performance Fabric compatibility bridge between **Nee
 
 ## 📖 Overview & Problem Statement
 
-In an unbridged environment, when a player morphs into an animal (such as a Wolf, Cat, Fox, Bee, etc.) via **Identity2** and interacts with another player:
-1. **Model Reversion & T-Pose Freeze**: NoN client-side render pipeline queries the raw entity type (`minecraft:player`). It loads the default human GeckoLib model (`player.m.geo.json`) during animal animations. Because human bones lack keyframes in animal animations, the player's limbs remain frozen at default rotations (T-Pose / standing freeze).
-2. **Texture UV Misalignment & Reflection Overhead**: NoN forces the player's 64x64 human skin onto the animal geometry, corrupting the UV mapping and causing unnecessary reflection calls every frame.
-3. **Role Slot Mismatch**: NoN server-side candidate matching ignores the player's active morph identity, causing right-click menus to only match human interactions.
+In an unbridged environment, when a player morphs into an animal (such as a Wolf, Cat, Fox, Bee, etc.) via **Identity2** and interacts with another player or mob:
+1. **Model Reversion & Interaction Mismatch**: NoN queries the underlying entity type as `minecraft:player`. You cannot trigger animal animations from menus, and entering an animation reverts you back into human form.
+2. **Camera Rotation Drift**: Because Identity2 syncs the player's live mouse yaw to the morph entity every frame, turning the camera during an animation causes the animal model to spin along with the camera view.
+3. **Animal Variants & Texture Packs**: Vanilla 1.21.11 features extensive mob variants (9 wolf biome variants, cat breeds, dyed sheep, etc.) alongside custom resource packs that standard hardcoded fallback paths fail to reflect.
 
 ### The Solution
 This bridge coordinates NoN's actor matching, server broadcasting, and client render pipelines:
 - **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations (`wolf.m.geo.json`, etc.) without introducing duplicate assets.
+- **Orientation Lock During Animation**: Locks `bodyRot`, `yRot`, and `xRot` to the animation's anchor orientation on the client render state, completely preventing the animal model from spinning when turning the camera.
+- **Dynamic 1.21.11 Animal Variants & Resource Pack Support**: Resolves textures directly through the morph's vanilla `LivingEntityRenderer` pipeline, preserving all 9 wolf variants, cat breeds, tamed collars, dyed sheep, and active resource pack overrides.
 - **Zero-Allocation Actor Tag Cache**: Eliminates heap churn and GC pauses during per-tick candidate scanning by caching immutable tag sets per morph type and gender.
-- **Fast Texture Interception (No Reflection)**: Bypasses expensive vanilla renderer reflection calls, instantly returning `null` to ensure pristine animal fallback textures (`wolf.png`, etc.) without UV tearing.
-- **Strict Fabric Mixin Compliance (Zero Mixin-on-Mixin)**: Adheres strictly to Fabric Sponge Mixin standards by exclusively intercepting vanilla classes (`EntityRenderDispatcher`) and standard public classes with deterministic mixin ordering (`priority = 1500`).
-- **Entity Variant Resolution**: Passes the live morph entity into NoN's variant resolver to support mob variants (e.g. Slime sizes).
+- **Strict Fabric Mixin Compliance**: Exclusively targets standard Minecraft classes (`EntityRenderDispatcher`) and public classes with deterministic ordering (`priority = 1500`), avoiding nested mixin issues.
 
 ---
 
@@ -42,11 +42,11 @@ This bridge coordinates NoN's actor matching, server broadcasting, and client re
  3. Server Model Negotiation ───► Broadcasts matching animal GeckoLib model roots
             │                     to clients via ServerAnimationController
             ▼
- 4. Priority Dispatcher Hook ───► Injects into EntityRenderDispatcher (priority = 1500)
-            │                     to attach morph ID and re-prepare GeckoReplacedRender cleanly
+ 4. Orientation & Render Hook ──► Injects into EntityRenderDispatcher (priority = 1500)
+            │                     to lock bodyRot/yRot to animation angles and re-prepare GeckoLib
             ▼
- 5. Fast Texture Fallback ──────► Intercepts resolveVanillaTexture at HEAD, skipping reflection
-                                  and ensuring native animal textures apply accurately!
+ 5. Dynamic Variant Texture ────► Resolves actual animal variant/resource pack texture via
+                                  the morph's LivingEntityRenderer, filtering out human skins!
 ```
 
 ---
@@ -76,7 +76,7 @@ cd non_identity2_bridge
 ./gradlew build
 ```
 
-The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.7+1.21.11.jar`.
+The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.8+1.21.11.jar`.
 
 ---
 
