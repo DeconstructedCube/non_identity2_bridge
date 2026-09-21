@@ -46,7 +46,8 @@ public final class Identity2ClientActorHelper {
             EntityRenderer<?, ?> renderer = dispatcher.getRenderer(livingMorph);
             if (renderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer && !(renderer instanceof AvatarRenderer)) {
                 // 如果传入的 renderState 已经是变身形态的状态对象（非人类皮肤状态），直接复用，0 分配！
-                if (currentRenderState != null && !(currentRenderState instanceof AvatarRenderState)) {
+                if (currentRenderState != null && !(currentRenderState instanceof AvatarRenderState)
+                        && livingRenderer.createRenderState().getClass().isInstance(currentRenderState)) {
                     return ((LivingEntityRenderer) livingRenderer).getTextureLocation(currentRenderState);
                 }
 

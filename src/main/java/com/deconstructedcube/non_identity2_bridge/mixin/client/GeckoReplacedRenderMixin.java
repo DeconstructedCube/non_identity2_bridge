@@ -32,9 +32,7 @@ public abstract class GeckoReplacedRenderMixin {
         // 普通实体（自然生成的牛、狼、羊等）直接放行给 NoN 自带的原生贴图管线处理。
         if (morph != null) {
             Identifier nativeTexture = Identity2ClientActorHelper.resolveMorphNativeTexture(morph, renderState);
-            if (nativeTexture != null) {
-                cir.setReturnValue(nativeTexture);
-            }
+            cir.setReturnValue(nativeTexture);
         }
     }
 

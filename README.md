@@ -12,19 +12,21 @@ An ultra-lightweight, high-performance Fabric compatibility bridge between **Nee
 
 ## 📖 Overview & Problem Statement
 
-In an unbridged environment, when a player morphs into an animal (such as a Wolf, Cat, Fox, Bee, etc.) via **Identity2** and interacts with another player or mob:
 1. **Model Reversion & Interaction Mismatch**: NoN queries the underlying entity type as `minecraft:player`. You cannot trigger animal animations from menus, and entering an animation reverts you back into human form.
-2. **Camera Rotation Drift**: Because Identity2 syncs the player's live mouse yaw to the morph entity every frame, turning the camera during an animation causes the animal model to spin along with the camera view.
-3. **Animal Variants & Texture Packs**: Vanilla 1.21.11 features extensive mob variants (9 wolf biome variants, cat breeds, dyed sheep, etc.) alongside custom resource packs that standard hardcoded fallback paths fail to reflect.
+2. **Human Skin Corruption & Missing Texture Blocks**: Because a morphed player is still an instance of `Player` in Java, NoN's built-in render resolver aggressively forces the player's 64x64 human skin onto the animal 3D model and applies human skin cube-hiding logic, causing animals (Fox, Wolf, Cow, Sheep, etc.) to be covered in human skins and genitalia/ears to turn into purple-black missing texture checkerboards.
+3. **Animation Freezing on Multi-Actor Actions**: In conjoined actions (e.g. `foxmplayer`, `mwolf_fox_doggy_a_00`, `cow_x_f_human`), NoN assigns human player animation clips (`p1_player`) instead of dedicated animal clips (`p1_fox`, `p1_wolf`, `p1_cow`), causing bone name mismatches that freeze the animal model in a motionless state.
+4. **Camera Rotation Drift**: Because Identity2 syncs the player's live mouse yaw to the morph entity every frame, turning the camera during an animation causes the animal model to spin along with the camera view.
+5. **Animal Variants & Texture Packs**: Vanilla 1.21.11 features extensive mob variants (9 wolf biome variants, cat breeds, dyed sheep, etc.) alongside custom resource packs that standard hardcoded fallback paths fail to reflect.
 
 ### The Solution
 This bridge coordinates NoN's actor matching, server broadcasting, and client render pipelines:
-- **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations (`wolf.m.geo.json`, etc.) without introducing duplicate assets.
+- **Zero Asset Overhead**: Directly reuses NoN's native GeckoLib animal models and animations (`wolf.m.geo.json`, `fox.m.geo.json`, etc.) without introducing duplicate assets.
+- **Complete Morph De-Humanization**: Intercepts NoN's client-side `resolveDestroyedSkinBaseTexture` and `resolvePlayerSkinPartHiddenCubeIndices` pipelines, completely preventing human skin overwrites and cube-hiding artifacts on animal morphs.
+- **Seamless Animal Animation Clip Binding**: Ensures morphed players cleanly map to their true animal animation tracks (`p1_fox`, `p1_cow`, etc.), eliminating animation freezing.
 - **Orientation Lock During Animation**: Locks `bodyRot`, `yRot`, and `xRot` to the animation's anchor orientation on the client render state, completely preventing the animal model from spinning when turning the camera.
 - **Dynamic 1.21.11 Animal Variants & Resource Pack Support**: Resolves textures directly through the morph's vanilla `LivingEntityRenderer` pipeline, preserving all 9 wolf variants, cat breeds, tamed collars, dyed sheep, and active resource pack overrides.
 - **Zero-Allocation Actor Tag Cache**: Eliminates heap churn and GC pauses during per-tick candidate scanning by caching immutable tag sets per morph type and gender.
 - **Strict Fabric Mixin Compliance**: Exclusively targets standard Minecraft classes (`EntityRenderDispatcher`) and public classes with deterministic ordering (`priority = 1500`), avoiding nested mixin issues.
-
 ---
 
 ## 🛠️ Architecture & How It Works
@@ -47,7 +49,10 @@ This bridge coordinates NoN's actor matching, server broadcasting, and client re
             ▼
  5. Dynamic Variant Texture ────► Resolves actual animal variant/resource pack texture via
                                   the morph's LivingEntityRenderer, filtering out human skins!
-```
+            │
+            ▼
+ 6. Morph De-Humanization ──────► Bypasses NoN's human player skin override & cube-hiding,
+                                  preventing corrupted human skins and purple-black genitalia!
 
 ---
 
@@ -76,7 +81,7 @@ cd non_identity2_bridge
 ./gradlew build
 ```
 
-The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.0.10+1.21.11.jar`.
+The compiled mod JAR will be generated under `build/libs/non_identity2_bridge-1.1.0+1.21.11.jar`.
 
 ---
 

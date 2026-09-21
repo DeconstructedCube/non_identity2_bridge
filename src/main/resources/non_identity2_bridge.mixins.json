@@ -8,7 +8,8 @@
 	],
 	"client": [
 		"client.EntityRenderDispatcherMixin",
-		"client.GeckoReplacedRenderMixin"
+		"client.GeckoReplacedRenderMixin",
+		"client.NeedsOfNatureClientMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

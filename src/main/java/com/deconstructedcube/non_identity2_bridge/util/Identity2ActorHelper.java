@@ -34,7 +34,10 @@ public final class Identity2ActorHelper {
         return IdentityApi.getCurrentMorph(entity);
     }
 
-    public static EntityType<?> getEffectiveEntityType(Entity entity) {
+    public static EntityType<?> getEffectiveEntityType(@Nullable Entity entity) {
+        if (entity == null) {
+            return null;
+        }
         Entity morph = IdentityApi.getCurrentMorph(entity);
         if (morph != null) {
             return morph.getType();
@@ -49,7 +52,10 @@ public final class Identity2ActorHelper {
         return entity.getType();
     }
 
-    public static boolean isEffectiveBaby(LivingEntity living) {
+    public static boolean isEffectiveBaby(@Nullable LivingEntity living) {
+        if (living == null) {
+            return false;
+        }
         Entity morph = getMorph(living);
         if (morph instanceof LivingEntity livingMorph) {
             return livingMorph.isBaby();
@@ -57,9 +63,12 @@ public final class Identity2ActorHelper {
         return living.isBaby();
     }
 
-    public static Set<String> provideMorphActorTags(Entity entity) {
+    public static Set<String> provideMorphActorTags(@Nullable Entity entity) {
+        if (entity == null) {
+            return Set.of();
+        }
         EntityType<?> morphType = getEffectiveEntityType(entity);
-        if (morphType == EntityType.PLAYER) {
+        if (morphType == null || morphType == EntityType.PLAYER) {
             return Set.of();
         }
 
@@ -82,6 +91,9 @@ public final class Identity2ActorHelper {
 
     private static Set<String> buildMorphActorTags(TagCacheKey key) {
         Identifier morphId = BuiltInRegistries.ENTITY_TYPE.getKey(key.type());
+        if (morphId == null) {
+            return Set.of("actor.morph", "actor.feral");
+        }
         LinkedHashSet<String> tags = new LinkedHashSet<>();
         tags.add("actor.morph");
         tags.add("actor.feral");
