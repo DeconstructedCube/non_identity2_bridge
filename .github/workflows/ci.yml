@@ -1,4 +1,4 @@
-name: CI Build & Static Analysis
+name: CI Build
 
 on:
   push:
@@ -20,14 +20,16 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
-      - name: Run Automated Static Analysis & Build
-        run: ./gradlew build --scan --stacktrace
-        working-directory: mods/non_identity2_bridge
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x ./gradlew
 
-      - name: Upload Build Artifact
+      - name: Build with Gradle
+        run: ./gradlew build --stacktrace
+
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: non_identity2_bridge-jar
-          path: mods/non_identity2_bridge/build/libs/*.jar
+          name: build-artifacts
+          path: build/libs/*.jar
