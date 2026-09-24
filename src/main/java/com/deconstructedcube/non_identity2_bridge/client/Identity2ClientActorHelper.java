@@ -93,10 +93,13 @@ public final class Identity2ClientActorHelper {
         }
         String path = typeId.getPath();
         if ("pig".equals(path)) {
-            return Identifier.withDefaultNamespace("textures/entity/pig/pig.png");
+            return Identifier.withDefaultNamespace("textures/entity/pig/temperate_pig.png");
         }
         if ("cow".equals(path)) {
-            return Identifier.withDefaultNamespace("textures/entity/cow/cow.png");
+            return Identifier.withDefaultNamespace("textures/entity/cow/temperate_cow.png");
+        }
+        if ("chicken".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/chicken/temperate_chicken.png");
         }
         if ("sheep".equals(path)) {
             return Identifier.withDefaultNamespace("textures/entity/sheep/sheep.png");
@@ -106,9 +109,6 @@ public final class Identity2ClientActorHelper {
         }
         if ("cat".equals(path)) {
             return Identifier.withDefaultNamespace("textures/entity/cat/tabby.png");
-        }
-        if ("chicken".equals(path)) {
-            return Identifier.withDefaultNamespace("textures/entity/chicken/chicken.png");
         }
         return Identifier.withDefaultNamespace("textures/entity/" + path + "/" + path + ".png");
     }
