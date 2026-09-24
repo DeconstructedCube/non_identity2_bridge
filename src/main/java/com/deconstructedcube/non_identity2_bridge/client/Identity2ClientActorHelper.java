@@ -12,8 +12,10 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +30,8 @@ public final class Identity2ClientActorHelper {
     /**
      * 极速、零反射提取变身实体原生贴图：
      * 1. 优先复用 NoN 传入的已就绪 RenderState，避免多余对象分配。
-     * 2. 利用泛型擦除直接 invokevirtual 触发 getTextureLocation，彻底告别反射开销。
+     * 2. 利用泛型擦除直接 invokevirtual 触发 getTextureLocation。
+     * 3. 若返回 missingno 或提取失败，使用原版标准实体贴图兜底，彻底防止触发 NoN 的红色错误材质。
      */
     @Nullable
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -39,32 +42,75 @@ public final class Identity2ClientActorHelper {
 
         Minecraft client = Minecraft.getInstance();
         if (client == null) {
-            return null;
+            return fallbackDefaultMobTexture(livingMorph.getType());
         }
         EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
         if (dispatcher == null) {
-            return null;
+            return fallbackDefaultMobTexture(livingMorph.getType());
         }
 
         try {
             EntityRenderer<?, ?> renderer = dispatcher.getRenderer(livingMorph);
             if (renderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer && !(renderer instanceof AvatarRenderer)) {
-                // 如果传入的 renderState 已经是变身形态的状态对象（非人类皮肤状态），直接复用，0 分配！
                 if (currentRenderState != null && !(currentRenderState instanceof AvatarRenderState)
                         && livingRenderer.createRenderState().getClass().isInstance(currentRenderState)) {
-                    return ((LivingEntityRenderer) livingRenderer).getTextureLocation(currentRenderState);
+                    Identifier id = ((LivingEntityRenderer) livingRenderer).getTextureLocation(currentRenderState);
+                    if (isValidMobTexture(id)) {
+                        return id;
+                    }
                 }
 
-                // 极端情况下的兜底单次生成
                 EntityRenderState tempState = ((EntityRenderer) livingRenderer).createRenderState(livingMorph, 0.0f);
                 if (tempState instanceof LivingEntityRenderState livingTempState) {
-                    return ((LivingEntityRenderer) livingRenderer).getTextureLocation(livingTempState);
+                    Identifier id = ((LivingEntityRenderer) livingRenderer).getTextureLocation(livingTempState);
+                    if (isValidMobTexture(id)) {
+                        return id;
+                    }
                 }
             }
         } catch (Throwable ignored) {
         }
 
-        return null;
+        return fallbackDefaultMobTexture(livingMorph.getType());
+    }
+
+    public static boolean isValidMobTexture(@Nullable Identifier id) {
+        if (id == null) {
+            return false;
+        }
+        String path = id.getPath().toLowerCase(java.util.Locale.ROOT);
+        return !path.contains("missingno") && !path.contains("skin") && !path.startsWith("textures/entity/player/");
+    }
+
+    @Nullable
+    public static Identifier fallbackDefaultMobTexture(EntityType<?> type) {
+        if (type == null) {
+            return null;
+        }
+        Identifier typeId = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+        if (typeId == null) {
+            return null;
+        }
+        String path = typeId.getPath();
+        if ("pig".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/pig/pig.png");
+        }
+        if ("cow".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/cow/cow.png");
+        }
+        if ("sheep".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/sheep/sheep.png");
+        }
+        if ("wolf".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/wolf/wolf.png");
+        }
+        if ("cat".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/cat/tabby.png");
+        }
+        if ("chicken".equals(path)) {
+            return Identifier.withDefaultNamespace("textures/entity/chicken/chicken.png");
+        }
+        return Identifier.withDefaultNamespace("textures/entity/" + path + "/" + path + ".png");
     }
 
     public static double resolveAuthoredTimelineSeconds(@Nullable UUID instanceId, float tickDelta) {

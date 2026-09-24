@@ -1,14 +1,10 @@
 package com.deconstructedcube.non_identity2_bridge.util;
 
+import com.deconstructedcube.non_identity2_bridge.client.Identity2ClientActorHelper;
 import com.nonid.GenderHolder;
 import net.Gabou.identity2.api.IdentityApi;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -16,7 +12,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +25,6 @@ public final class Identity2ActorHelper {
     }
 
     private static final Map<TagCacheKey, Set<String>> TAG_CACHE = new ConcurrentHashMap<>();
-    private static final Map<Class<?>, Method> TEXTURE_METHOD_CACHE = new ConcurrentHashMap<>();
 
     private Identity2ActorHelper() {
     }
@@ -126,36 +120,11 @@ public final class Identity2ActorHelper {
             return null;
         }
 
-        Minecraft client = Minecraft.getInstance();
-        if (client == null) {
-            return null;
-        }
-        EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
-        if (dispatcher == null) {
-            return null;
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            return Identity2ClientActorHelper.resolveMorphNativeTexture(morph, null);
         }
 
-        try {
-            EntityRenderer<?, ?> renderer = dispatcher.getRenderer(livingMorph);
-            if (renderer instanceof LivingEntityRenderer<?, ?, ?> livingRenderer && !(renderer instanceof AvatarRenderer)) {
-                EntityRenderState tempState = extractMorphRenderState(livingRenderer, livingMorph, 0.0f);
-                Method method = findTextureLocationMethod(livingRenderer.getClass());
-                if (method != null) {
-                    Object result = method.invoke(livingRenderer, tempState);
-                    if (result instanceof Identifier textureId && isNonPlayerTexture(textureId)) {
-                        return textureId;
-                    }
-                }
-            }
-        } catch (Throwable ignored) {
-        }
-
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T extends Entity> EntityRenderState extractMorphRenderState(EntityRenderer<T, ?> renderer, Entity entity, float tickProgress) {
-        return ((EntityRenderer<T, EntityRenderState>) renderer).createRenderState((T) entity, tickProgress);
+        return Identity2ClientActorHelper.fallbackDefaultMobTexture(livingMorph.getType());
     }
 
     public static boolean isNonPlayerTexture(Identifier id) {
@@ -163,23 +132,6 @@ public final class Identity2ActorHelper {
             return false;
         }
         String path = id.getPath().toLowerCase(java.util.Locale.ROOT);
-        return !path.contains("skin") && !path.startsWith("textures/entity/player/");
-    }
-
-    @Nullable
-    private static Method findTextureLocationMethod(Class<?> rendererClass) {
-        return TEXTURE_METHOD_CACHE.computeIfAbsent(rendererClass, cls -> {
-            for (Class<?> c = cls; c != null; c = c.getSuperclass()) {
-                for (Method m : c.getDeclaredMethods()) {
-                    if (Identifier.class.isAssignableFrom(m.getReturnType())
-                            && m.getParameterCount() == 1
-                            && LivingEntityRenderState.class.isAssignableFrom(m.getParameterTypes()[0])) {
-                        m.setAccessible(true);
-                        return m;
-                    }
-                }
-            }
-            return null;
-        });
+        return !path.contains("missingno") && !path.contains("skin") && !path.startsWith("textures/entity/player/");
     }
 }
