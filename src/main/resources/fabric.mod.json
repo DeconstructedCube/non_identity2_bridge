@@ -14,7 +14,11 @@
 			"com.deconstructedcube.non_remorphed_bridge.NonRemorphedBridge"
 		],
 		"fabric-gametest": [
-			"com.deconstructedcube.non_remorphed_bridge.gametest.NonRemorphedBridgeGameTest"
+			"com.deconstructedcube.non_remorphed_bridge.gametest.EntityShapeGameTest",
+			"com.deconstructedcube.non_remorphed_bridge.gametest.ActorTagsGameTest",
+			"com.deconstructedcube.non_remorphed_bridge.gametest.LiquidCollectorGameTest",
+			"com.deconstructedcube.non_remorphed_bridge.gametest.GeneticsAndPregnancyGameTest",
+			"com.deconstructedcube.non_remorphed_bridge.gametest.SkinIsolationGameTest"
 		]
 	},
 	"mixins": [
