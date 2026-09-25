@@ -17,91 +17,96 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 
 /**
- * GameTests for Entity Type resolution, 1.21.11 mob variants, and baby filtering.
+ * GameTests focused on the Player entity lifecycle and shape transformations.
  */
-public class EntityShapeGameTest {
+public class PlayerMorphGameTest {
 
     @GameTest
-    public void testEffectiveEntityType_MultipleSpecies(GameTestHelper helper) {
+    public void testPlayerMorphLifecycle(GameTestHelper helper) {
         Player mockPlayer = helper.makeMockPlayer(GameType.SURVIVAL);
 
-        // 1. Unmorphed (Human)
+        // 1. Initial State: Human
         helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.PLAYER,
-                "Unmorphed player must evaluate to EntityType.PLAYER");
+                "Player must initially have EntityType.PLAYER");
+        helper.assertTrue(RemorphedActorHelper.getMorph(mockPlayer) == null,
+                "Unmorphed player must have null morph");
 
-        // 2. Horse
-        Horse horse = EntityType.HORSE.create(helper.getLevel(), EntitySpawnReason.COMMAND);
-        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(horse);
-        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.HORSE,
-                "Morphed horse player must evaluate to EntityType.HORSE");
-
-        // 3. Wolf
+        // 2. Transform into Wolf
         Wolf wolf = EntityType.WOLF.create(helper.getLevel(), EntitySpawnReason.COMMAND);
         ((PlayerDataProvider) mockPlayer).walkers$updateShapes(wolf);
         helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.WOLF,
-                "Morphed wolf player must evaluate to EntityType.WOLF");
+                "Morphed player must resolve to EntityType.WOLF");
+        helper.assertTrue(RemorphedActorHelper.getMorph(mockPlayer) == wolf,
+                "Morph instance must match the assigned wolf");
 
-        // 4. Cow
-        Cow cow = EntityType.COW.create(helper.getLevel(), EntitySpawnReason.COMMAND);
-        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(cow);
-        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.COW,
-                "Morphed cow player must evaluate to EntityType.COW");
+        // 3. Switch to Horse
+        Horse horse = EntityType.HORSE.create(helper.getLevel(), EntitySpawnReason.COMMAND);
+        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(horse);
+        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.HORSE,
+                "Morphed player must switch to EntityType.HORSE");
 
-        // 5. Pig
-        Pig pig = EntityType.PIG.create(helper.getLevel(), EntitySpawnReason.COMMAND);
-        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(pig);
-        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.PIG,
-                "Morphed pig player must evaluate to EntityType.PIG");
-
-        // 6. Sheep
-        Sheep sheep = EntityType.SHEEP.create(helper.getLevel(), EntitySpawnReason.COMMAND);
-        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(sheep);
-        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.SHEEP,
-                "Morphed sheep player must evaluate to EntityType.SHEEP");
+        // 4. Revert back to Human
+        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(null);
+        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.PLAYER,
+                "Unmorphed player must return to EntityType.PLAYER");
+        helper.assertTrue(RemorphedActorHelper.getMorph(mockPlayer) == null,
+                "Reverted player must have null morph");
 
         helper.succeed();
     }
 
     @GameTest
-    public void testBabyFiltering_PigAndWolf(GameTestHelper helper) {
+    public void testPlayerBabyMorphStates(GameTestHelper helper) {
         Player mockPlayer = helper.makeMockPlayer(GameType.SURVIVAL);
 
-        // Adult Pig
+        // Adult Pig Morph
         Pig adultPig = EntityType.PIG.create(helper.getLevel(), EntitySpawnReason.COMMAND);
         if (adultPig != null) {
             adultPig.setBaby(false);
         }
         ((PlayerDataProvider) mockPlayer).walkers$updateShapes(adultPig);
         helper.assertFalse(RemorphedActorHelper.isEffectiveBaby(mockPlayer),
-                "Adult pig morph must NOT evaluate to baby");
+                "Adult pig morph on player must NOT be baby");
 
-        // Baby Pig
+        // Baby Pig Morph
         Pig babyPig = EntityType.PIG.create(helper.getLevel(), EntitySpawnReason.COMMAND);
         if (babyPig != null) {
             babyPig.setBaby(true);
         }
         ((PlayerDataProvider) mockPlayer).walkers$updateShapes(babyPig);
         helper.assertTrue(RemorphedActorHelper.isEffectiveBaby(mockPlayer),
-                "Baby pig morph MUST evaluate to baby");
+                "Baby pig morph on player MUST be baby");
 
         helper.succeed();
     }
 
     @GameTest
-    public void testVariantMobShapes_CatAndFrog(GameTestHelper helper) {
+    public void testPlayerFarmAndVariantMorphs(GameTestHelper helper) {
         Player mockPlayer = helper.makeMockPlayer(GameType.SURVIVAL);
+
+        // Cow
+        Cow cow = EntityType.COW.create(helper.getLevel(), EntitySpawnReason.COMMAND);
+        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(cow);
+        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.COW,
+                "Player morphed as cow must evaluate to EntityType.COW");
+
+        // Sheep
+        Sheep sheep = EntityType.SHEEP.create(helper.getLevel(), EntitySpawnReason.COMMAND);
+        ((PlayerDataProvider) mockPlayer).walkers$updateShapes(sheep);
+        helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.SHEEP,
+                "Player morphed as sheep must evaluate to EntityType.SHEEP");
 
         // Cat
         Cat cat = EntityType.CAT.create(helper.getLevel(), EntitySpawnReason.COMMAND);
         ((PlayerDataProvider) mockPlayer).walkers$updateShapes(cat);
         helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.CAT,
-                "Cat morph must evaluate to EntityType.CAT");
+                "Player morphed as cat must evaluate to EntityType.CAT");
 
         // Frog
         Frog frog = EntityType.FROG.create(helper.getLevel(), EntitySpawnReason.COMMAND);
         ((PlayerDataProvider) mockPlayer).walkers$updateShapes(frog);
         helper.assertTrue(RemorphedActorHelper.getEffectiveEntityType(mockPlayer) == EntityType.FROG,
-                "Frog morph must evaluate to EntityType.FROG");
+                "Player morphed as frog must evaluate to EntityType.FROG");
 
         helper.succeed();
     }
