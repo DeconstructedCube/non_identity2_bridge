@@ -35,28 +35,35 @@ graph TD
 
 ---
 
-## 📦 Requirements
+## 📦 Requirements & Environment Matrix
 
-| Component | Minimum Version | Note |
+| Component | Version | Role / Upstream Baseline |
 | :--- | :--- | :--- |
-| **Minecraft** | `~1.21.11` | Fabric Environment |
-| **Fabric Loader** | `>=0.18.2` | |
-| **Fabric API** | `*` | Required |
-| **Needs of Nature (NoN)** | `>=1.5.0` | Required |
-| **ReMorphed** | `>=7.0.0` | Required |
+| **Minecraft** | `1.21.11` | Target Game Runtime (Fabric) |
+| **Fabric Loader** | `>=0.18.2` | Mod Loader |
+| **Fabric API** | `0.141.6+1.21.11` | Core Fabric Hooks |
+| **Java** | `21` (OpenJDK) | Compilation & Execution Target |
+| **GeckoLib** | `5.4.5` | Animation Engine |
+| **Needs of Nature (NoN)** | `1.5.11` | Animation & Physiology Core (`needsofnature-1.5.11.21.11.jar`) |
+| **NoN Default Pack** | `v1.5.1` | Community Animation & Content Pack (`afw_animdefs`) |
+| **ReMorphed** | `7.1.1+1.21.11` | Advanced Morph System (Ported from upstream `7.1.1` on 1.21.7/1.21.8) |
+| **Woodwalkers** | `7.2.7+1.21.11` | Morph Foundation Engine (Ported from upstream `7.2.7` on 1.21.7/1.21.8) |
+| **CraftedCore** | `7.0.0+1.21.11` | Multi-Loader Utility Lib (Ported from upstream `7.0.0` on 1.21.7/1.21.8) |
+| **SkinShifter** | `2.0.0+1.21.11` | Dynamic Skin Swapping (Ported from upstream `2.0.0` on 1.21.7/1.21.8) |
+| **non_remorphed_bridge**| `1.1.2+1.21.11` | Compatibility Layer between NoN and ReMorphed |
 
 ---
 
 ## 🧪 Verification & Test Suite Checklist
 
 ### 1. Animation Matching & 1.21.11 Variant Rendering
-- [ ] **Wolf (9 Variants & Collar)**: Verify that all 1.21.11 wolf variants (ashen, black, rusty, snowy, etc.) and dyed collars render without missing textures in animal animations.
-- [ ] **Cat & Axolotl**: Verify that multi-color registry variants render accurately without reverting to default skins.
-- [ ] **Sheep & Fox**: Verify that quadruped interaction/mating animations are selected correctly instead of falling back to human animations.
+- [ ] **Wolf (9 Variants & Collar)**: Verify that all 1.21.11 wolf variants (ashen, black, rusty, snowy, etc.) and dyed collars render without missing textures in animal animations (`wolfmplayer`, `wolfmwolf`).
+- [ ] **Pig & Cow (Farm Animals)**: Verify Temperate/Warm/Cold pig and cow textures render accurately in `pigmplayer`, `pigmpig`, and quadruped interaction clips without texture corruption.
+- [ ] **Cat & Axolotl**: Verify that multi-color registry variants render accurately in `catmplayer` without reverting to default skins.
+- [ ] **Sheep & Fox**: Verify that quadruped interaction/mating animations (`sheepmplayer`, `foxmplayer`) are selected correctly instead of falling back to human animations.
 - [ ] **Baby Mobs**: Verify that baby shapes (e.g., baby rabbit/baby wolf) enforce baby check constraints and filter out incompatible animations.
-- [ ] **Hostile & Humanoid Mobs (Zombie, Skeleton, Enderman)**: Verify attack/defeated animations and confirm camera orientation decoupling operates normally.
+- [ ] **Hostile & Humanoid Mobs (Zombie, Skeleton, Enderman)**: Verify attack/defeated animations (`zombiemplayer`, `skeletonmplayer`, `endermanmplayer`) and confirm camera orientation decoupling operates normally.
 - [ ] **Resource Packs**: Verify that custom high-resolution mob textures are loaded dynamically by the renderer.
-
 ### 2. Physiology, Liquid Attribution & Horse Collector
 - [ ] **Horse Liquid Collector (Equine Morph)**: Verify that morphed stallions (Horse, Donkey, Mule) successfully fill the collector on peak and emit full drip particles.
 - [ ] **Collector Bottling**: Verify that right-clicking a full collector with an empty glass bottle yields a `Horse Liquid Bottle`.
