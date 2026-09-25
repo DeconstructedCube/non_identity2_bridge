@@ -46,10 +46,10 @@ graph TD
 | **GeckoLib** | `5.4.5` | Animation Engine |
 | **Needs of Nature (NoN)** | `1.5.11` | Animation & Physiology Core (`needsofnature-1.5.11.21.11.jar`) |
 | **NoN Default Pack** | `v1.5.1` | Community Animation & Content Pack (`afw_animdefs`) |
-| **ReMorphed** | `7.1.1+1.21.11` | Advanced Morph System (Ported from upstream `7.1.1` on 1.21.7/1.21.8) |
-| **Woodwalkers** | `7.2.7+1.21.11` | Morph Foundation Engine (Ported from upstream `7.2.7` on 1.21.7/1.21.8) |
-| **CraftedCore** | `7.0.0+1.21.11` | Multi-Loader Utility Lib (Ported from upstream `7.0.0` on 1.21.7/1.21.8) |
-| **SkinShifter** | `2.0.0+1.21.11` | Dynamic Skin Swapping (Ported from upstream `2.0.0` on 1.21.7/1.21.8) |
+| **ReMorphed** | `7.1.1+1.21.11` | Advanced Morph System (Backported from upstream `8.1` on Minecraft 26.2) |
+| **Woodwalkers** | `7.2.7+1.21.11` | Morph Foundation Engine (Backported from upstream `8.3.2` on Minecraft 26.2) |
+| **CraftedCore** | `7.0.0+1.21.11` | Multi-Loader Utility Lib (Backported from upstream `8.2.1` on Minecraft 26.2) |
+| **SkinShifter** | `2.0.0+1.21.11` | Dynamic Skin Swapping (Backported from upstream `3.2.0` on Minecraft 26.2) |
 | **non_remorphed_bridge**| `1.1.2+1.21.11` | Compatibility Layer between NoN and ReMorphed |
 
 ---
