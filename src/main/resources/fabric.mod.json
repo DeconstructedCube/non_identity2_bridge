@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "non_woodwalkers_bridge",
 	"version": "${version}",
-	"name": "Needs of Nature x Woodwalkers Bridge",
-	"description": "Seamless compatibility between Needs of Nature animations and Woodwalkers morphs.",
+	"name": "Needs of Nature x Woodwalkers / ReMorphed Bridge",
+	"description": "Seamless compatibility between Needs of Nature animations and Woodwalkers / ReMorphed morphs.",
 	"authors": [
 		"DeconstructedCube"
 	],
@@ -24,5 +24,8 @@
 		"fabric-api": "*",
 		"needsofnature": ">=1.5.0",
 		"walkers": ">=7.0.0"
+	},
+	"suggests": {
+		"remorphed": ">=7.0.0"
 	}
 }

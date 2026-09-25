@@ -20,7 +20,7 @@ repositories {
 	}
 	maven {
 		name = 'GeckoLib'
-		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 		content {
 			includeGroup("software.bernie.geckolib")
 		}
@@ -46,6 +46,8 @@ dependencies {
 	modImplementation files('libs/needsofnature-1.5.11.21.11.jar')
 	modImplementation "dev.tocraft:craftedcore-fabric:7.0.0+1.21.11"
 	modImplementation "dev.tocraft:walkers-fabric:7.2.7+1.21.11"
+	modCompileOnly "dev.tocraft:skinshifter-fabric:2.0.0+1.21.11"
+	modCompileOnly "dev.tocraft:remorphed-fabric:7.1.1+1.21.11"
 }
 checkstyle {
 	toolVersion = '10.21.4'
@@ -87,7 +89,8 @@ java {
 }
 
 jar {
+	def baseName = project.base.archivesName.get()
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${baseName}"}
 	}
 }
