@@ -36,7 +36,11 @@ public final class RemorphedActorHelper {
         return null;
     }
 
-    public static EntityType<?> getEffectiveEntityType(Entity entity) {
+    @Nullable
+    public static EntityType<?> getEffectiveEntityType(@Nullable Entity entity) {
+        if (entity == null) {
+            return null;
+        }
         Entity morph = getMorph(entity);
         if (morph != null) {
             return morph.getType();
@@ -44,17 +48,22 @@ public final class RemorphedActorHelper {
         return entity.getType();
     }
 
-    public static boolean isEffectiveBaby(LivingEntity living) {
+    public static boolean isEffectiveBaby(@Nullable LivingEntity living) {
+        if (living == null) {
+            return false;
+        }
         Entity morph = getMorph(living);
         if (morph instanceof LivingEntity livingMorph) {
             return livingMorph.isBaby();
         }
         return living.isBaby();
     }
-
     public static Set<String> provideMorphActorTags(Entity entity) {
+        if (entity == null) {
+            return Set.of();
+        }
         EntityType<?> morphType = getEffectiveEntityType(entity);
-        if (morphType == EntityType.PLAYER) {
+        if (morphType == null || morphType == EntityType.PLAYER) {
             return Set.of();
         }
 
