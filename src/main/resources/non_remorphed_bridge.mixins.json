@@ -7,7 +7,6 @@
 		"ServerAnimationControllerMixin"
 	],
 	"client": [
-		"client.EntityRenderDispatcherMixin",
 		"client.GeckoReplacedRenderMixin",
 		"client.NeedsOfNatureClientMixin",
 		"client.NonDestroyedSkinClientMixin"

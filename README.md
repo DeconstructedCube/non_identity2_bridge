@@ -19,7 +19,6 @@ This bridge resolves conflicts between NoN's player-centric animation and render
 - 🔄 **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to return the morph's data instead of `minecraft:player`. This ensures NoN assigns animal animation clips (e.g., `p1_fox`) instead of human clips during multi-actor animations.
 - 🖼️ **Texture Resolution**: Directly queries the vanilla `LivingEntityRenderer.getTextureLocation` via runtime render state for morph textures (including variants and resource packs) with zero reflection and zero deceptive fallbacks.
 - 🛑 **Render State Correction**: Bypasses NoN's `resolveDestroyedSkinBaseTexture` and skin-part cube-hiding for morphed players, preventing human textures from being mapped onto animal models.
-- 📌 **Orientation Lock**: Locks `bodyRot`, `yRot`, and `xRot` on the client render state to the animation's anchor orientation, preventing the model from rotating with the camera.
 - 💾 **Actor Tags Cache**: Implements a concurrent cache for morph actor tags (`actor.morph`, `actor.feral`, gender traits) to prevent allocation overhead during tick scans.
 - ⚙️ **Mixin Compliance**: Targets standard Minecraft classes and public classes with deterministic ordering (`priority = 1500`) to minimize mixin conflicts.
 
@@ -30,8 +29,7 @@ graph TD
     Player[Morphed Player] --> |MatchActorMixin| Type[Redirect Entity Type & Variant]
     Type --> |RemorphedActorHelper| Tags[Inject Actor Tags Cache]
     Tags --> |ServerAnimationController| Broadcast[Broadcast Animal GeckoLib Model]
-    Broadcast --> |EntityRenderDispatcherMixin| Orientation[Lock Animation Orientation]
-    Orientation --> |RemorphedClientActorHelper| Texture[Resolve Native Morph Texture]
+    Broadcast --> |GeckoReplacedRenderMixin| Texture[Resolve Native Morph Texture]
     Texture --> |NeedsOfNatureClientMixin| Render[Bypass Human Skin Overrides]
 ```
 
