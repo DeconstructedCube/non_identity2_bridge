@@ -1,4 +1,4 @@
-package com.deconstructedcube.non_woodwalkers_bridge.mixin.client;
+package com.deconstructedcube.non_remorphed_bridge.mixin.client;
 
 import com.nonid.internal.animation.client.runtime.ClientAnimationRuntime;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -19,7 +19,7 @@ public abstract class EntityRenderDispatcherMixin {
             method = "extractEntity(Lnet/minecraft/world/entity/Entity;F)Lnet/minecraft/client/renderer/entity/state/EntityRenderState;",
             at = @At("RETURN")
     )
-    private void non_woodwalkers_bridge$lockMorphedAnimationOrientation(
+    private void non_remorphed_bridge$lockMorphedAnimationOrientation(
             Entity entity,
             float tickDelta,
             CallbackInfoReturnable<EntityRenderState> cir
@@ -30,7 +30,6 @@ public abstract class EntityRenderDispatcherMixin {
                     && ClientAnimationRuntime.isActorActive(entity.getUUID())
                     && !ClientAnimationRuntime.isActorUsingSimplifiedPresentation(entity.getUUID())) {
 
-                // 锁定身体和头部朝向，彻底杜绝转动鼠标时动物模型随视角旋转
                 ClientAnimationRuntime.LockedOrientation locked = ClientAnimationRuntime.getLockedOrientation(entity.getUUID());
                 if (locked != null) {
                     livingState.bodyRot = locked.bodyYaw();

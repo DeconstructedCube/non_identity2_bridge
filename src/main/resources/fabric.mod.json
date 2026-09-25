@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "non_woodwalkers_bridge",
+	"id": "non_remorphed_bridge",
 	"version": "${version}",
-	"name": "Needs of Nature x Woodwalkers / ReMorphed Bridge",
-	"description": "Seamless compatibility between Needs of Nature animations and Woodwalkers / ReMorphed morphs.",
+	"name": "Needs of Nature x ReMorphed Bridge",
+	"description": "Seamless compatibility between Needs of Nature animations and ReMorphed morphs.",
 	"authors": [
 		"DeconstructedCube"
 	],
@@ -11,11 +11,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.deconstructedcube.non_woodwalkers_bridge.NonWoodwalkersBridge"
+			"com.deconstructedcube.non_remorphed_bridge.NonRemorphedBridge"
 		]
 	},
 	"mixins": [
-		"non_woodwalkers_bridge.mixins.json"
+		"non_remorphed_bridge.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.18.2",
@@ -23,9 +23,6 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"needsofnature": ">=1.5.0",
-		"walkers": ">=7.0.0"
-	},
-	"suggests": {
 		"remorphed": ">=7.0.0"
 	}
 }

@@ -9,4 +9,4 @@ pluginManagement {
 	}
 }
 
-rootProject.name = 'non_woodwalkers_bridge'
+rootProject.name = 'non_remorphed_bridge'

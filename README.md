@@ -1,4 +1,4 @@
-# Needs of Nature × Woodwalkers Bridge (`non_woodwalkers_bridge`)
+# Needs of Nature × ReMorphed Bridge (`non_remorphed_bridge`)
 
 <div align="center">
   <a href="https://github.com/DeconstructedCube/non_identity2_bridge/releases/latest"><img src="https://img.shields.io/github/v/release/DeconstructedCube/non_identity2_bridge?color=blue" alt="Latest Release"></a>
@@ -10,14 +10,14 @@
 
 ---
 
-A Fabric compatibility layer between **Needs of Nature (NoN)** and **Woodwalkers**.
+A Fabric compatibility layer between **Needs of Nature (NoN)** and **ReMorphed**.
 
 ## Technical Details
 
-This bridge resolves conflicts between NoN's player-centric animation and rendering assumptions and Woodwalkers' morph mechanics:
+This bridge resolves conflicts between NoN's player-centric animation and rendering assumptions and ReMorphed's morph mechanics:
 
 - 🔄 **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to return the morph's data instead of `minecraft:player`. This ensures NoN assigns animal animation clips (e.g., `p1_fox`) instead of human clips during multi-actor animations.
-- 🖼️ **Texture Resolution**: Reuses NoN's `RenderState` and utilizes generic type erasure via `LivingEntityRenderer` to extract vanilla morph textures (including variants and resource packs) without reflection.
+- 🖼️ **Texture Resolution**: Directly queries the vanilla `LivingEntityRenderer.getTextureLocation` via runtime render state for morph textures (including variants and resource packs) with zero reflection and zero deceptive fallbacks.
 - 🛑 **Render State Correction**: Bypasses NoN's `resolveDestroyedSkinBaseTexture` and skin-part cube-hiding for morphed players, preventing human textures from being mapped onto animal models.
 - 📌 **Orientation Lock**: Locks `bodyRot`, `yRot`, and `xRot` on the client render state to the animation's anchor orientation, preventing the model from rotating with the camera.
 - 💾 **Actor Tags Cache**: Implements a concurrent cache for morph actor tags (`actor.morph`, `actor.feral`, gender traits) to prevent allocation overhead during tick scans.
@@ -28,22 +28,24 @@ This bridge resolves conflicts between NoN's player-centric animation and render
 ```mermaid
 graph TD
     Player[Morphed Player] --> |MatchActorMixin| Type[Redirect Entity Type & Variant]
-    Type --> |WoodwalkersActorHelper| Tags[Inject Actor Tags Cache]
+    Type --> |RemorphedActorHelper| Tags[Inject Actor Tags Cache]
     Tags --> |ServerAnimationController| Broadcast[Broadcast Animal GeckoLib Model]
     Broadcast --> |EntityRenderDispatcherMixin| Orientation[Lock Animation Orientation]
-    Orientation --> |WoodwalkersClientActorHelper| Texture[Resolve Native Morph Texture]
+    Orientation --> |RemorphedClientActorHelper| Texture[Resolve Native Morph Texture]
     Texture --> |NeedsOfNatureClientMixin| Render[Bypass Human Skin Overrides]
 ```
 
 ---
+
 ## 📦 Requirements
 
 | Component | Minimum Version | Note |
 | :--- | :--- | :--- |
 | **Minecraft** | `~1.21.11` | Fabric Environment |
 | **Fabric Loader** | `>=0.18.2` | |
+| **Fabric API** | `*` | Required |
 | **Needs of Nature (NoN)** | `>=1.5.0` | Required |
-| **Woodwalkers** | `>=7.0.0` | Required |
+| **ReMorphed** | `>=7.0.0` | Required |
 
 ---
 
