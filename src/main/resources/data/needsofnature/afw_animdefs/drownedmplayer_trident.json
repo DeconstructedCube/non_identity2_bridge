@@ -1,0 +1,47 @@
+{
+    "animators": ["Incarnadine"],
+    "actors": [
+        {
+            "label": "zombie",
+            "entity_types": ["minecraft:drowned"],
+            "actor_tags": ["gender.male"],
+            "prop_right": "minecraft:trident",
+            "activity": "active",
+            "injector": "V"
+        },
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        }
+    ],
+    "weight": 0.3,
+    "content_tags": ["doggy"],
+    "water": "underwater",
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1.375,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 1.375,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1.375,
+      "speed": 1,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+    ]
+}

@@ -1,0 +1,42 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    }
+  ],
+  "display_name": "Pole Tease (facing in)",
+  "content_tags": ["poledance","pole in"],
+  "system_tags": ["tease"],
+  "tease": {
+    "near_animation_energy_multiplier": 2.0
+  },
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 2
+    },
+    "width": 1,
+    "blocks": "#minecraft:fences",
+    "clearance": {
+      "width": 1,
+      "height": 1,
+      "depth": 1
+    }
+  },
+  "camera": {
+    "block_requirement_collision": "ignore"
+  },
+  "match_content_on_join": true,
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "stage_seconds": -1,
+      "allow_join": true,
+      "escapable": true
+    }
+  ]
+}

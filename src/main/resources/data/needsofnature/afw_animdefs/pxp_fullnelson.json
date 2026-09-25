@@ -1,0 +1,51 @@
+{
+  "animators": ["PercePerceiver", "Incarnadine"],
+  "actors": [
+    {
+            "label": "player1",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        },
+        {
+            "label": "player2",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+			"injector": "A"
+        }
+  ],
+  "display_name": "Full Nelson",
+  "content_tags": ["fullnelson","standing"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1
+    },
+    {
+      "stage": 2,
+      "loop": false,
+      "cycle_seconds": 1.5
+    },
+	{
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.5
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "escapable": false,
+      "non_peak": true
+    },
+	{
+      "stage": 5,
+      "loop": false,
+      "cycle_seconds": 5.5,
+      "escapable": false,
+      "allow_join": false
+    }
+  ]
+}

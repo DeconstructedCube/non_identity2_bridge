@@ -1,0 +1,45 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    }
+  ],
+  "content_tags": ["pole dance"],
+  "system_tags": ["tease"],
+  "tease": {
+    "near_animation_energy_multiplier": 1.5
+  },
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 2
+    },
+    "width": {
+      "max": 1,
+      "both_axes": true,
+      "include_obstructions": true
+    },
+    "blocks": "#minecraft:fences",
+    "clearance": {
+      "width": 1,
+      "height": 1,
+      "depth": 1
+    }
+  },
+  "camera": {
+    "torso_tracking": "continuous",
+    "block_requirement_collision": "ignore"
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 12,
+      "stage_seconds": -1,
+      "allow_join": true,
+      "escapable": true
+    }
+  ]
+}

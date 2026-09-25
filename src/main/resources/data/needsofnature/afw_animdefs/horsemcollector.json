@@ -1,0 +1,36 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "label": "actor2",
+      "entity_types": ["needsofnature:horse_liquid_collector"],
+      "actor_tags": []
+    },
+    {
+      "label": "actor1",
+      "entity_types": ["minecraft:horse", "minecraft:donkey", "minecraft:mule"],
+      "actor_tags": ["gender.male"],
+      "injector": true
+    }
+  ],
+  "position_anchor_actor": "actor2",
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.7917,
+      "allow_join": false,
+      "non_peak": false
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.7917,
+      "cycle_midpoint_offset_seconds": -0.15,
+      "speed": 0.5,
+      "allow_join": false,
+      "non_peak": true
+    }
+  ]
+}

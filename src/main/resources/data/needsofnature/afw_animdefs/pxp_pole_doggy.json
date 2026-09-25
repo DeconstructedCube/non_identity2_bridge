@@ -1,0 +1,57 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "label": "playerf",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "activity": "passive",
+      "receiver": true
+    },
+    {
+      "label": "playerm",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.male"],
+      "activity": "active",
+      "injector": "V"
+    }
+  ],
+  "display_name": "Pole Doggy",
+  "content_tags": ["pole in"],
+  "camera": {
+    "block_requirement_collision": "ignore"
+  },
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 2
+    },
+    "width": 1,
+    "blocks": "#minecraft:fences",
+    "clearance": {
+      "width": 1,
+      "height": 1,
+      "depth": 1
+    }
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5833
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.5833
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

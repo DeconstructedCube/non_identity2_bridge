@@ -1,0 +1,68 @@
+{
+  "display_name": "Wall Press",
+  "animators": ["ChristmasPuffin"],
+  "content_tags": ["wall","standing", "holding"],
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 2
+    },
+    "clearance": {
+      "width": 1,
+      "height": 1,
+      "depth": 1
+    }
+  },
+  "actors": [
+    {
+      "label": "top",
+      "entity_types": [
+        "minecraft:player"
+      ],
+	  "actor_tags": [
+        "gender.male"
+      ],
+      "activity": "active",
+      "injector": "V"
+    },
+    {
+      "label": "bottom",
+      "entity_types": [
+        "minecraft:player"
+      ],
+      "activity": "passive",
+      "receiver": true
+    }
+  ],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 3.1667,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "loop": false,
+      "cycle_seconds": 6,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1.75,
+      "allow_join": false,
+      "non_peak": true,
+      "escapable": false
+    }
+  ]
+}

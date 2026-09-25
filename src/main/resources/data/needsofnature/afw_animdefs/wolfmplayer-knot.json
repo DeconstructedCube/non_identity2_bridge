@@ -1,0 +1,49 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    },
+    {
+      "entity_types": ["minecraft:wolf"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    }
+  ],
+  "weight": 0.3,
+  "liquid_gain_multiplier": 2,
+  "content_tags": ["doggy"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 1,
+      "stage_duration_multiplier": 0.5,
+      "stage_seconds": 4,
+      "allow_join": true
+    },
+    {
+      "stage": 3,
+      "loop": false,
+      "cycle_seconds": 3.25,
+      "allow_join": false,
+      "escapable": false
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1,
+      "stage_seconds": 20,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

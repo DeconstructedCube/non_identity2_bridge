@@ -1,0 +1,42 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "label": "actor2",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    },
+    {
+      "label": "actor1",
+      "entity_types": ["minecraft:dolphin"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    },
+    {
+      "label": "actor3",
+      "entity_types": ["minecraft:dolphin"],
+      "actor_tags": ["gender.male"],
+      "injector": "A"
+    }
+  ],
+  "water": "underwater",
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "cycle_midpoint_offset_seconds": -0.05,
+      "speed": 0.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

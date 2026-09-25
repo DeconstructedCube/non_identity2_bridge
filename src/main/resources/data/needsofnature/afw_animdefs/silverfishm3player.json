@@ -1,0 +1,60 @@
+{
+    "animators": ["Incarnadine"],
+    "actors": [
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        },
+        {
+            "label": "silverfish1",
+            "entity_types": ["minecraft:silverfish"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "V"
+        },
+        {
+            "label": "silverfish2",
+            "entity_types": ["minecraft:silverfish"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "A"
+        },
+        {
+            "label": "silverfish3",
+            "entity_types": ["minecraft:silverfish"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "M"
+        }
+    ],
+    "content_tags": ["standing"],
+    "join_after": ["needsofnature:silverfishm2player"],
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": false
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "stage_duration_multiplier": 0.5,
+      "speed": 1.2,
+      "allow_join": false
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "speed": 0.6,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+    ]
+}

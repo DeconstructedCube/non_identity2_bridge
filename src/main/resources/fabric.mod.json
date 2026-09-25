@@ -12,6 +12,9 @@
 	"entrypoints": {
 		"main": [
 			"com.deconstructedcube.non_remorphed_bridge.NonRemorphedBridge"
+		],
+		"fabric-gametest": [
+			"com.deconstructedcube.non_remorphed_bridge.gametest.NonRemorphedBridgeGameTest"
 		]
 	},
 	"mixins": [

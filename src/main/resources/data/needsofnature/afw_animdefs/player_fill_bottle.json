@@ -1,0 +1,21 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "prop_right": "minecraft:glass_bottle"
+    }
+  ],
+  "system_tags": ["fillbottle"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": false,
+      "cycle_seconds": 5,
+      "allow_join": false,
+      "escapable": true,
+      "non_peak": true
+    }
+  ]
+}

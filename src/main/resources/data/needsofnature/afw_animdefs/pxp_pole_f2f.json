@@ -1,0 +1,62 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "label": "playerf",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "activity": "passive",
+      "receiver": true
+    },
+    {
+      "label": "playerm",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.male"],
+      "activity": "active",
+      "injector": "V"
+    }
+  ],
+  "camera": {
+    "block_requirement_collision": "ignore"
+  },
+  "display_name": "Pole Standing Missionary",
+  "content_tags": ["pole out"],
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 2
+    },
+    "width": 1,
+    "blocks": "#minecraft:fences",
+    "clearance": {
+      "width": 1,
+      "height": 1,
+      "depth": 1
+    }
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.75
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.75
+    },
+    {
+      "stage": 3,
+      "loop": false,
+      "cycle_seconds": 0.75
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1.0,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

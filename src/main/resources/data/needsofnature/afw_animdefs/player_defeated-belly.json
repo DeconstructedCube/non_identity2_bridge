@@ -1,0 +1,21 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    }
+  ],
+  "system_tags": ["defeated"],
+  "content_tags": ["doggy", "from_behind", "on_belly"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "stage_seconds": -1,
+      "allow_join": true,
+      "escapable": true
+    }
+  ]
+}

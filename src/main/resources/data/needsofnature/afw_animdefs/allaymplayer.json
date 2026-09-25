@@ -1,0 +1,43 @@
+{
+  "display_name": "Allay x Player",
+  "animators": ["Noble"],
+  "actors": [
+    {
+      "label": "wisp1",
+      "entity_types": [
+        "minecraft:allay",
+        "minecraft:vex"
+      ],
+      "actor_tags": [
+        "gender.male"
+      ],
+      "activity": "active",
+      "injector": "M"
+    },
+    {
+      "label": "player",
+      "entity_types": [
+        "minecraft:player"
+      ],
+      "activity": "passive"
+    }
+  ],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": false,
+      "speed": 0.5,
+      "non_peak": true,
+      "escapable": false
+    }
+  ]
+}

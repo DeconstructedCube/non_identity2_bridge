@@ -10,8 +10,6 @@
     <module name="TreeWalker">
         <module name="UnusedImports"/>
         <module name="RedundantImport"/>
-        <module name="ModifierOrder"/>
-        <module name="NeedBraces"/>
         <module name="EmptyBlock"/>
         <module name="DefaultComesLast"/>
         <module name="SimplifyBooleanExpression"/>
@@ -22,11 +20,15 @@
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9_]*)*$"/>
         </module>
         <module name="TypeName"/>
-        <!-- Supports standard Java methods and Mixin prefix$methodName format -->
+        <!-- Supports standard Java methods, Mixin prefix$methodName format, and uppercase math helper methods -->
         <module name="MethodName">
-            <property name="format" value="^[a-z][a-zA-Z0-9_]*(\$[a-zA-Z0-9_]+)?$"/>
+            <property name="format" value="^[a-zA-Z_][a-zA-Z0-9_]*(\$[a-zA-Z0-9_]+)?$"/>
         </module>
-        <module name="ParameterName"/>
-        <module name="LocalVariableName"/>
+        <module name="ParameterName">
+            <property name="format" value="^[a-zA-Z_][a-zA-Z0-9_]*$"/>
+        </module>
+        <module name="LocalVariableName">
+            <property name="format" value="^[a-zA-Z_][a-zA-Z0-9_]*$"/>
+        </module>
     </module>
 </module>

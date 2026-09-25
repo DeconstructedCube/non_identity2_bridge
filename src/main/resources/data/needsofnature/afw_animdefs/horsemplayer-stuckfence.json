@@ -1,0 +1,65 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "label": "player",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    },
+    {
+      "label": "horse",
+      "entity_types": ["minecraft:horse", "minecraft:donkey", "minecraft:mule"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    }
+  ],
+  "content_tags": ["stuckfence"],
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 1
+    },
+    "width": 2,
+    "blocks": "#minecraft:fences",
+    "clearance": {
+      "width": 1,
+      "height": 2,
+      "depth": 1
+    }
+  },
+  "camera": {
+    "block_requirement_collision": "ignore"
+  },
+  "match_content_on_join": true,
+  "stages": [
+    {
+      "stage": 1,
+      "loop": false,
+      "cycle_seconds": 4.0,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.875,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.875,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 2.0,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

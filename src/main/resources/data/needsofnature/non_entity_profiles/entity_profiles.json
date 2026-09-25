@@ -1,0 +1,511 @@
+{
+  "mixed_liquid_color": "F2EBBF",
+  "entries": [
+    {
+      "entity": "minecraft:spider",
+      "offspring_min": 1,
+      "offspring_max": 3,
+      "birth_entity": "minecraft:spider",
+      "birth_mode": "egg",
+      "egg": {
+        "start_size": 0.5,
+        "end_size": 1,
+        "texture": "needsofnature:textures/entity/pregnancy_egg/minecraft_spider.png",
+        "health": 30
+      },
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 45,
+        "color": "DECFFF"
+      }
+    },
+    {
+      "entity": "minecraft:cave_spider",
+      "offspring_min": 2,
+      "offspring_max": 5,
+      "birth_entity": "minecraft:cave_spider",
+      "birth_mode": "egg",
+      "egg": {
+        "start_size": 0.5,
+        "end_size": 1,
+        "texture": "needsofnature:textures/entity/pregnancy_egg/minecraft_spider.png",
+        "health": 30
+      },
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 45,
+        "color": "DECFFF"
+      }
+    },
+    {
+      "entity": "minecraft:wolf",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:wolf",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 30
+      }
+    },
+    {
+      "entity": "minecraft:horse",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "birth_entity": "minecraft:horse",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 100
+      }
+    },
+    {
+      "entity": "minecraft:donkey",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "birth_entity": "minecraft:donkey",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 90
+      }
+    },
+    {
+      "entity": "minecraft:mule",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "pregnancy_chance_percent": 0,
+      "birth_entity": "minecraft:mule",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 90
+      }
+    },
+    {
+      "entity": "minecraft:fox",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:fox",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 20
+      }
+    },
+    {
+      "entity": "minecraft:dolphin",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "birth_entity": "minecraft:dolphin",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 40
+      }
+    },
+    {
+      "entity": "minecraft:turtle",
+      "offspring_min": 1,
+      "offspring_max": 4,
+      "birth_block": "minecraft:turtle_egg",
+      "birth_mode": "egg_block"
+    },
+    {
+      "entity": "minecraft:pig",
+      "offspring_min": 1,
+      "offspring_max": 3,
+      "birth_entity": "minecraft:pig",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 30
+      }
+    },
+    {
+      "entity": "minecraft:sheep",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:sheep",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 48,
+        "female_chance": 47,
+        "both_chance": 5
+      },
+      "liquid": {
+        "gain_ml": 35
+      }
+    },
+    {
+      "entity": "minecraft:rabbit",
+      "offspring_min": 2,
+      "offspring_max": 8,
+      "birth_entity": "minecraft:rabbit",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 48,
+        "female_chance": 47,
+        "both_chance": 5
+      },
+      "liquid": {
+        "gain_ml": 12
+      }
+    },
+    {
+      "entity": "minecraft:cat",
+      "offspring_min": 1,
+      "offspring_max": 4,
+      "birth_entity": "minecraft:cat",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 48,
+        "female_chance": 47,
+        "both_chance": 5
+      },
+      "liquid": {
+        "gain_ml": 15
+      }
+    },
+    {
+      "entity": "minecraft:zombie",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:zombie",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 15
+      }
+    },
+    {
+      "entity": "minecraft:drowned",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:drowned",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 15
+      }
+    },
+    {
+      "entity": "minecraft:husk",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:husk",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 15,
+        "color": "#bfae93"
+      }
+    },
+    {
+      "entity": "minecraft:skeleton",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:skeleton",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 5,
+        "color": "#cecece"
+      }
+    },
+    {
+      "entity": "minecraft:stray",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:stray",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 5,
+        "color": "#cecece"
+      }
+    },
+    {
+      "entity": "minecraft:creeper",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:creeper",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 25,
+        "color": "#aeffab"
+      }
+    },
+    {
+      "entity": "minecraft:enderman",
+      "offspring_min": 2,
+      "offspring_max": 6,
+      "birth_item": "minecraft:ender_pearl",
+      "birth_mode": "item",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 55,
+        "color": "#e7c0fa"
+      }
+    },
+    {
+      "entity": "minecraft:ender_dragon",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "pregnancy_chance_percent": 100,
+      "birth_block": "minecraft:dragon_egg",
+      "birth_mode": "egg_block"
+    },
+    {
+      "entity": "minecraft:phantom",
+      "offspring_min": 1,
+      "offspring_max": 3,
+      "birth_entity": "minecraft:phantom",
+      "birth_mode": "egg",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "egg": {
+        "start_size": 0.75,
+        "end_size": 1.5,
+        "texture": "needsofnature:textures/entity/pregnancy_egg/minecraft_silverfish.png",
+        "health": 25
+      },
+      "liquid": {
+        "gain_ml": 25,
+        "color": "#85afe2"
+      }
+    },
+    {
+      "entity": "minecraft:silverfish",
+      "offspring_min": 4,
+      "offspring_max": 16,
+      "birth_entity": "minecraft:silverfish",
+      "birth_mode": "egg",
+      "look_at_nearby_animations": false,
+      "multi_actor_join_chance_percent": 100,
+      "egg": {
+        "start_size": 0.3,
+        "end_size": 0.5,
+        "texture": "needsofnature:textures/entity/pregnancy_egg/minecraft_silverfish.png",
+        "health": 20
+      },
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 15,
+        "color": "#efeeae"
+      }
+    },
+    {
+      "entity": "minecraft:piglin",
+      "offspring_min": 1,
+      "offspring_max": 3,
+      "birth_entity": "minecraft:piglin",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 20
+      }
+    },
+    {
+      "entity": "minecraft:zombified_piglin",
+      "offspring_min": 1,
+      "offspring_max": 3,
+      "birth_entity": "minecraft:zombified_piglin",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 20
+      }
+    },
+    {
+      "entity": "minecraft:piglin_brute",
+      "offspring_min": 1,
+      "offspring_max": 3,
+      "birth_entity": "minecraft:piglin_brute",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 20
+      }
+    },
+    {
+      "entity": "minecraft:blaze",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:blaze",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 30,
+        "color": "#faf1c0"
+      }
+    },
+    {
+      "entity": "minecraft:hoglin",
+      "offspring_min": 1,
+      "offspring_max": 5,
+      "birth_entity": "minecraft:hoglin",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 90
+      }
+    },
+    {
+      "entity": "minecraft:zoglin",
+      "offspring_min": 1,
+      "offspring_max": 5,
+      "birth_entity": "minecraft:zoglin",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 90
+      }
+    },
+    {
+      "entity": "minecraft:polar_bear",
+      "offspring_min": 1,
+      "offspring_max": 4,
+      "birth_entity": "minecraft:polar_bear",
+      "birth_mode": "direct",
+      "liquid": {
+        "gain_ml": 45
+      }
+    },
+    {
+      "entity": "minecraft:bee",
+      "offspring_min": 2,
+      "offspring_max": 5,
+      "birth_entity": "minecraft:bee",
+      "birth_mode": "egg",
+      "multi_actor_join_chance_percent": 100,
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "egg": {
+        "start_size": 0.3,
+        "end_size": 0.5,
+        "texture": "needsofnature:textures/entity/pregnancy_egg/minecraft_silverfish.png",
+        "health": 20
+      },
+      "liquid": {
+        "type": "honey",
+        "gain_ml": 10,
+        "color": "#d1a83a"
+      }
+    },
+    {
+      "entity": "minecraft:player",
+      "liquid": {
+        "gain_ml": 15
+      }
+    },
+    {
+      "entity": "minecraft:sniffer",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "birth_entity": "minecraft:sniffer",
+      "birth_mode": "egg",
+      "egg": {
+        "start_size": 0.5,
+        "end_size": 1,
+        "texture": "needsofnature:textures/entity/pregnancy_egg/minecraft_sniffer.png",
+        "health": 30
+      },
+      "gender_spawn": {
+        "male_chance": 48,
+        "female_chance": 47,
+        "both_chance": 5
+      },
+      "liquid": {
+        "gain_ml": 125,
+        "color": "#ffd394"
+      }
+    },
+    {
+      "entity": "minecraft:breeze",
+      "offspring_min": 1,
+      "offspring_max": 1,
+      "birth_entity": "minecraft:breeze",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 25,
+        "color": "#ded9fc"
+      }
+    },
+    {
+      "entity": "minecraft:allay",
+      "offspring_min": 1,
+      "offspring_max": 2,
+      "birth_entity": "minecraft:allay",
+      "birth_mode": "direct",
+      "gender_spawn": {
+        "male_chance": 100,
+        "female_chance": 0,
+        "both_chance": 0
+      },
+      "liquid": {
+        "gain_ml": 15,
+        "color": "#d9f4fc"
+      }
+    }
+  ]
+}

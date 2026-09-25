@@ -1,0 +1,36 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "receiver": true
+    },
+    {
+      "entity_types": ["minecraft:pig"],
+      "actor_tags": ["gender.male"],
+      "injector": "A"
+    }
+  ],
+  "content_tags": ["doggy"],
+  "weight": 0.1,
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "cycle_midpoint_offset_seconds": -0.15,
+      "speed": 0.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

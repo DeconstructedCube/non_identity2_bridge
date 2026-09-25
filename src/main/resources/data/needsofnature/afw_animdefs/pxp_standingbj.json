@@ -1,0 +1,47 @@
+{
+  "animators": ["PercePerceiver"],
+  "actors": [
+    {
+            "label": "player1",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "active"
+        },
+        {
+            "label": "player2",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": ["gender.male"],
+            "activity": "passive",
+			"injector": "M"
+        }
+  ],
+  "display_name": "Standing Blowjob",
+  "content_tags": ["blowjob","standing"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.75
+    },
+    {
+      "stage": 2,
+      "loop": false,
+      "cycle_seconds": 0.75
+    },
+	{
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.5
+    },
+	{
+      "stage": 4,
+	  "use_stage": 3,
+	  "speed": 0.45,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": false,
+      "escapable": false,
+	  "non_peak": true
+    }
+  ]
+}

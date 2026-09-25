@@ -1,0 +1,59 @@
+{
+    "animators": ["Incarnadine"],
+    "actors": [
+        {
+            "label": "rabbit1",
+            "entity_types": ["minecraft:rabbit"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "V"
+        },
+        {
+            "label": "rabbit2",
+            "entity_types": ["minecraft:rabbit"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "M"
+        },
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        }
+    ],
+    "content_tags": ["missionary"],
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "speed": 1.4,
+      "stage_duration_multiplier": 0.6,
+      "allow_join": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "speed": 1.6,
+      "stage_duration_multiplier": 0.4,
+      "allow_join": false
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 0.7083,
+      "speed": 1.0,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+    ]
+}

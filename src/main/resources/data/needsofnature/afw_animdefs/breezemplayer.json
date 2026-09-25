@@ -1,0 +1,34 @@
+{
+  "display_name": "Breeze x Player",
+  "animators": ["Noble"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    },
+    {
+      "entity_types": ["minecraft:breeze"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    }
+  ],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1,
+      "allow_join": false,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 1,
+      "speed": 0.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

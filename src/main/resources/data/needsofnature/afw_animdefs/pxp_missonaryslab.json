@@ -1,0 +1,59 @@
+{
+  "animators": ["PercePerceiver"],
+  "actors": [
+    {
+            "label": "playerf",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        },
+        {
+            "label": "playerm",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+			"injector": "V"
+        }
+  ],
+  "display_name": "Slab Missionary",
+  "content_tags": ["missionary"],
+    "block_requirements": {
+      "type": "center_support",
+      "support": "half_height",
+      "placement": "directional_clearance",
+      "surface_radius": 0,
+      "clearance": {
+        "width": 1,
+        "height": 1,
+        "depth": 1
+      }
+    },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5
+    },
+    {
+      "stage": 2,
+      "loop": false,
+      "cycle_seconds": 2.25
+    },
+	{
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.25
+    },
+	{
+      "stage": 4,
+	  "use_stage": 3,
+	  "speed": 0.25,
+      "cycle_midpoint_offset_seconds": -0.05,
+      "loop": true,
+      "cycle_seconds": 0.25,
+      "allow_join": false,
+      "escapable": false,
+	  "non_peak": true
+    }
+  ]
+}

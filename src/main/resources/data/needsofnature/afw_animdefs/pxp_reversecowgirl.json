@@ -1,0 +1,52 @@
+{
+    "animators": ["Koriscene"],
+    "actors": [
+        {
+            "label": "top",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "A"
+        },
+        {
+            "label": "bottom",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive",
+            "receiver": true
+        }
+    ],
+    "display_name": "Male Player x Player (Reverse Cowgirl)",
+    "content_tags": ["on_back", "reverse_cowgirl", "cowgirl"],
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "loop": false,
+      "cycle_seconds": 1.25,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "non_peak": true,
+      "allow_join": true,
+      "escapable": false
+    }
+    ]
+}

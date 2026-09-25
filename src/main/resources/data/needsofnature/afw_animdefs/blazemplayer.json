@@ -1,0 +1,61 @@
+{
+    "animators": ["Incarnadine"],
+    "actors": [
+        {
+            "label": "blaze",
+            "entity_types": ["minecraft:blaze"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "V"
+        },
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        }
+    ],
+    "content_tags": ["doggy"],
+    "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 1
+    },
+    "clearance": {
+      "width": 1,
+      "height": 2,
+      "depth": 2
+    }
+  },
+  "stages": [
+  {
+    "stage": 1,
+    "loop": true,
+    "cycle_seconds": 2,
+    "allow_join": true,
+    "stage_duration_multiplier": 0.4
+  },
+  {
+    "stage": 2,
+    "loop": true,
+    "cycle_seconds": 2,
+    "allow_join": true,
+    "stage_duration_multiplier": 0.4
+  },
+  {
+    "stage": 3,
+    "loop": true,
+    "cycle_seconds": 2,
+    "allow_join": true,
+    "stage_duration_multiplier": 0.3
+  },
+  {
+    "stage": 4,
+    "loop": true,
+    "cycle_seconds": 2,
+    "allow_join": false,
+    "escapable": false,
+    "non_peak": true
+  }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    }
+  ],
+  "system_tags": ["stuck"],
+  "content_tags": ["stuckfence"],
+  "stuck": {
+    "initial_escape_difficulty_multiplier": 5.0,
+    "final_escape_difficulty_multiplier": 0.75,
+    "ease_delay_seconds": 10,
+    "ease_duration_seconds": 30,
+    "joined_escape_difficulty_multiplier": 5,
+    "damage_behavior": "stop_on_damage"
+  },
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 1
+    },
+    "width": 2,
+    "blocks": "#minecraft:fences",
+    "clearance": {
+      "width": 1,
+      "height": 2,
+      "depth": 2
+    }
+  },
+  "camera": {
+    "block_requirement_collision": "ignore"
+  },
+  "match_content_on_join": true,
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 3,
+      "stage_seconds": -1,
+      "allow_join": true,
+      "escapable": true
+    }
+  ]
+}

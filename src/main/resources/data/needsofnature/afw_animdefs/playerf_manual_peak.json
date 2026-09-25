@@ -1,0 +1,27 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.female"]
+    }
+  ],
+  "system_tags": ["manualPeak"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.75,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

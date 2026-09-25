@@ -1,0 +1,53 @@
+{
+    "animators": ["Incarnadine"],
+    "actors": [
+        {
+            "label": "hoglin",
+            "entity_types": ["minecraft:hoglin", "minecraft:zoglin"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "V"
+        },
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        }
+    ],
+    "content_tags": ["doggy"],
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1.0,
+      "stage_duration_multiplier": 0.4,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 1.0,
+      "stage_duration_multiplier": 0.4,
+      "speed": 1.1,
+      "allow_join": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.7917,
+      "stage_duration_multiplier": 0.3,
+      "speed": 1.2,
+      "allow_join": true
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1.4583,
+      "speed": 1.0,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+    ]
+}

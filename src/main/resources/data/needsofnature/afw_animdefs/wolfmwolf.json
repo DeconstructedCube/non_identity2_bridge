@@ -1,0 +1,36 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "label": "wolf2",
+      "entity_types": ["minecraft:wolf"],
+      "actor_tags": [],
+      "receiver": true
+    },
+    {
+      "label": "wolf1",
+      "entity_types": ["minecraft:wolf"],
+      "actor_tags": ["gender.male"],
+      "injector": true
+    }
+  ],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "cycle_midpoint_offset_seconds": -0.15,
+      "speed": 0.5,
+      "stage_seconds": 25,
+      "allow_join": false,
+      "non_peak": true
+    }
+  ]
+}

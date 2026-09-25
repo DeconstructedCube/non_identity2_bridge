@@ -1,0 +1,35 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "label": "bottom",
+      "entity_types": ["minecraft:pig"],
+      "actor_tags": [],
+      "receiver": true
+    },
+    {
+      "label": "top",
+      "entity_types": ["minecraft:pig"],
+      "actor_tags": ["gender.male"],
+      "injector": true
+    }
+  ],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.6667,
+      "cycle_midpoint_offset_seconds": -0.15,
+      "speed": 0.5,
+      "allow_join": false,
+      "non_peak": true
+    }
+  ]
+}

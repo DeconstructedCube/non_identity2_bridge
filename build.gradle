@@ -4,6 +4,8 @@ plugins {
 	id 'checkstyle'
 }
 
+apply from: "gradle/mixin-check.gradle"
+
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
@@ -48,6 +50,19 @@ dependencies {
 	modImplementation "dev.tocraft:walkers-fabric:7.2.7+1.21.11"
 	modCompileOnly "dev.tocraft:skinshifter-fabric:2.0.0+1.21.11"
 	modCompileOnly "dev.tocraft:remorphed-fabric:7.1.1+1.21.11"
+
+	modImplementation fabricApi.module("fabric-gametest-api-v1", project.fabric_api_version)
+}
+
+loom {
+	runs {
+		gametest {
+			server()
+			name "GameTest"
+			vmArg "-Dfabric-api.gametest"
+			vmArg "-Dfabric-api.gametest.report-path=build/reports/gametest.xml"
+		}
+	}
 }
 checkstyle {
 	toolVersion = '10.21.4'

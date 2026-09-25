@@ -1,0 +1,41 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "label": "playerf",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "activity": "passive",
+      "receiver": true
+    },
+    {
+      "label": "playerm",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.male"],
+      "activity": "active",
+      "injector": "V"
+    }
+  ],
+  "display_name": "Standing Doggy",
+  "content_tags": ["doggy","standing"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.5
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "label": "player",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    }
+  ],
+  "system_tags": ["defeated"],
+  "content_tags": ["sleepright"],
+  "weight": 2.0,
+  "block_requirements": {
+        "type": "center_support",
+        "support": "surface",
+        "blocks": "#minecraft:beds",
+        "placement": "surface_footprint",
+        "surface_footprint": {
+            "width": 2,
+            "height": 2,
+            "depth": 2,
+            "margin": 0
+        }
+    },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 2.0,
+      "stage_seconds": -1,
+      "allow_join": true,
+      "escapable": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    },
+    {
+      "entity_types": ["minecraft:fox"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    }
+  ],
+  "content_tags": ["doggy"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 1,
+      "speed": 0.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

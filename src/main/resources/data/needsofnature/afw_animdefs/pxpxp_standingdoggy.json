@@ -1,0 +1,45 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "label": "actor1",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "activity": "passive",
+      "receiver": true
+    },
+    {
+      "label": "actor2",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.male"],
+      "activity": "active",
+      "injector": "V"
+    },
+    {
+      "label": "actor3",
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.male"],
+      "activity": "active",
+      "injector": "M"
+    }
+  ],
+  "display_name": "Standing Doggy Threesome",
+  "content_tags": ["doggy","standing"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "speed": 0.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+    "animators": ["PercePerceiver", "Incarnadine"],
+    "actors": [
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": [],
+            "activity": "passive"
+        },
+        {
+            "label": "bee1",
+            "entity_types": ["minecraft:bee"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "V"
+        },
+        {
+            "label": "bee2",
+            "entity_types": ["minecraft:bee"],
+            "actor_tags": ["gender.male"],
+            "activity": "active",
+            "injector": "M"
+        }
+    ],
+    "content_tags": ["floating"],
+    "join_after": ["needsofnature:beemplayerstanding"],
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.5005,
+      "stage_duration_multiplier": 0.5,
+      "speed": 1.2,
+      "allow_join": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "speed": 0.8,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+    ]
+}

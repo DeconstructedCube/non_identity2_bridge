@@ -1,0 +1,46 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    },
+    {
+      "label": "actor2",
+      "entity_types": ["minecraft:horse", "minecraft:donkey", "minecraft:mule"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    }
+  ],
+  "content_tags": ["doggy"],
+  "block_requirements": {
+    "type": "wall",
+    "height": {
+      "min": 1
+    },
+    "clearance": {
+      "width": 1,
+      "height": 2,
+      "depth": 2
+    }
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.7917,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.7917,
+      "cycle_midpoint_offset_seconds": -0.15,
+      "speed": 0.8,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

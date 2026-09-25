@@ -1,0 +1,30 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": []
+    }
+  ],
+  "system_tags": ["birth"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": false,
+      "cycle_seconds": 4.0,
+      "allow_join": false
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 4.0,
+      "allow_join": false
+    },
+    {
+      "stage": 3,
+      "loop": false,
+      "cycle_seconds": 2.0,
+      "allow_join": false
+    }
+  ]
+}

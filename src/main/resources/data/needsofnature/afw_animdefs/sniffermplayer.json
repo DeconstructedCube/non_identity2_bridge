@@ -1,0 +1,55 @@
+{
+  "animators": ["Incarnadine"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": [],
+      "receiver": true
+    },
+    {
+      "entity_types": ["minecraft:sniffer"],
+      "actor_tags": ["gender.male"],
+      "injector": "V"
+    }
+  ],
+  "content_tags": ["missionary"],
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "stage_duration_multiplier": 0.4,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 1.25,
+      "speed": 1.25,
+      "stage_duration_multiplier": 0.6,
+      "allow_join": true
+    },
+    {
+      "stage": 4,
+      "loop": false,
+      "cycle_seconds": 0.6667,
+      "allow_join": false
+    },
+    {
+      "stage": 5,
+      "loop": true,
+      "cycle_seconds": 2.0,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+      
+    }
+  ]
+}

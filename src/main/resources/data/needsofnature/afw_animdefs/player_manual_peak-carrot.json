@@ -1,0 +1,38 @@
+{
+  "animators": ["L1Z0"],
+  "actors": [
+    {
+      "entity_types": ["minecraft:player"],
+      "actor_tags": ["gender.female"],
+      "held_item": {
+        "items": ["minecraft:carrot", "minecraft:golden_carrot"],
+        "hand": "either",
+        "prop_slot": "right"
+      }
+    }
+  ],
+  "system_tags": ["manualPeak"],
+  "manual_peak": {
+    "priority": 100
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "use_stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "cycle_midpoint_offset_seconds": -0.15,
+      "speed": 0.5,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+  ]
+}

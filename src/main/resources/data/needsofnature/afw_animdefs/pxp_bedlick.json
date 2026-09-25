@@ -1,0 +1,86 @@
+{
+  "display_name": "Bedside Dinner",
+  "animators": ["ChristmasPuffin"],
+  "content_tags": ["on_back"],
+  "actors": [
+    {
+      "label": "top",
+      "entity_types": [
+        "minecraft:player"
+      ],
+      "activity": "active",
+      "receiver": true
+    },
+    {
+      "label": "bottom",
+      "entity_types": [
+        "minecraft:player"
+      ],
+      "activity": "passive",
+      "injector": "M"
+    }
+  ],
+  "block_requirements": {
+    "type": "center_support",
+    "support": "half_height",
+    "placement": "directional_clearance",
+    "surface_radius": 0,
+    "clearance": {
+      "width": 1,
+      "height": 1,
+      "depth": 1
+    }
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "loop": false,
+      "cycle_seconds": 1,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 3,
+      "loop": false,
+      "cycle_seconds": 1,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 1,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 5,
+      "loop": false,
+      "cycle_seconds": 2,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 6,
+      "loop": true,
+      "cycle_seconds": 0.5,
+      "allow_join": true,
+      "escapable": true
+    },
+    {
+      "stage": 7,
+      "loop": true,
+      "cycle_seconds": 1.5,
+      "allow_join": false,
+      "non_peak": true,
+      "escapable": false
+    }
+  ]
+}

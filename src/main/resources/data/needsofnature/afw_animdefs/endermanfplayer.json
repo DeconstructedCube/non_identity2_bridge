@@ -1,0 +1,50 @@
+{
+    "animators": ["Incarnadine"],
+    "actors": [
+        {
+            "label": "enderman",
+            "entity_types": ["minecraft:enderman"],
+            "actor_tags": ["gender.female"],
+            "activity": "active"
+        },
+        {
+            "label": "player",
+            "entity_types": ["minecraft:player"],
+            "actor_tags": ["gender.male"],
+            "activity": "passive",
+            "injector": "V"
+        }
+    ],
+    "content_tags": ["cowgirl"],
+    "stages": [
+    {
+      "stage": 1,
+      "loop": true,
+      "cycle_seconds": 0.75,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": true
+    },
+    {
+      "stage": 2,
+      "loop": true,
+      "cycle_seconds": 0.75,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": false
+    },
+    {
+      "stage": 3,
+      "loop": true,
+      "cycle_seconds": 0.75,
+      "stage_duration_multiplier": 0.5,
+      "allow_join": false
+    },
+    {
+      "stage": 4,
+      "loop": true,
+      "cycle_seconds": 2.0,
+      "allow_join": false,
+      "escapable": false,
+      "non_peak": true
+    }
+    ]
+}
