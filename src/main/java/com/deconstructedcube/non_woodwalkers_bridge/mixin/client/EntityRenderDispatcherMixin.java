@@ -1,4 +1,4 @@
-package com.deconstructedcube.non_identity2_bridge.mixin.client;
+package com.deconstructedcube.non_woodwalkers_bridge.mixin.client;
 
 import com.nonid.internal.animation.client.runtime.ClientAnimationRuntime;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -19,7 +19,7 @@ public abstract class EntityRenderDispatcherMixin {
             method = "extractEntity(Lnet/minecraft/world/entity/Entity;F)Lnet/minecraft/client/renderer/entity/state/EntityRenderState;",
             at = @At("RETURN")
     )
-    private void non_identity2_bridge$lockMorphedAnimationOrientation(
+    private void non_woodwalkers_bridge$lockMorphedAnimationOrientation(
             Entity entity,
             float tickDelta,
             CallbackInfoReturnable<EntityRenderState> cir

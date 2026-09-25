@@ -1,4 +1,4 @@
-# Needs of Nature × Identity2 Bridge (`non_identity2_bridge`)
+# Needs of Nature × Woodwalkers Bridge (`non_woodwalkers_bridge`)
 
 <div align="center">
   <a href="https://github.com/DeconstructedCube/non_identity2_bridge/releases/latest"><img src="https://img.shields.io/github/v/release/DeconstructedCube/non_identity2_bridge?color=blue" alt="Latest Release"></a>
@@ -10,11 +10,11 @@
 
 ---
 
-A Fabric compatibility layer between **Needs of Nature (NoN)** and **Identity2**.
+A Fabric compatibility layer between **Needs of Nature (NoN)** and **Woodwalkers**.
 
 ## Technical Details
 
-This bridge resolves conflicts between NoN's player-centric animation and rendering assumptions and Identity2's morph mechanics:
+This bridge resolves conflicts between NoN's player-centric animation and rendering assumptions and Woodwalkers' morph mechanics:
 
 - 🔄 **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to return the morph's data instead of `minecraft:player`. This ensures NoN assigns animal animation clips (e.g., `p1_fox`) instead of human clips during multi-actor animations.
 - 🖼️ **Texture Resolution**: Reuses NoN's `RenderState` and utilizes generic type erasure via `LivingEntityRenderer` to extract vanilla morph textures (including variants and resource packs) without reflection.
@@ -28,14 +28,14 @@ This bridge resolves conflicts between NoN's player-centric animation and render
 ```mermaid
 graph TD
     Player[Morphed Player] --> |MatchActorMixin| Type[Redirect Entity Type & Variant]
-    Type --> |Identity2ActorHelper| Tags[Inject Actor Tags Cache]
+    Type --> |WoodwalkersActorHelper| Tags[Inject Actor Tags Cache]
     Tags --> |ServerAnimationController| Broadcast[Broadcast Animal GeckoLib Model]
     Broadcast --> |EntityRenderDispatcherMixin| Orientation[Lock Animation Orientation]
-    Orientation --> |Identity2ClientActorHelper| Texture[Resolve Native Morph Texture]
+    Orientation --> |WoodwalkersClientActorHelper| Texture[Resolve Native Morph Texture]
     Texture --> |NeedsOfNatureClientMixin| Render[Bypass Human Skin Overrides]
 ```
----
 
+---
 ## 📦 Requirements
 
 | Component | Minimum Version | Note |
@@ -43,7 +43,7 @@ graph TD
 | **Minecraft** | `~1.21.11` | Fabric Environment |
 | **Fabric Loader** | `>=0.18.2` | |
 | **Needs of Nature (NoN)** | `>=1.5.0` | Required |
-| **Identity2** | `>=2.2.0` | Required |
+| **Woodwalkers** | `>=7.0.0` | Required |
 
 ---
 

@@ -1,6 +1,6 @@
-package com.deconstructedcube.non_identity2_bridge.mixin.client;
+package com.deconstructedcube.non_woodwalkers_bridge.mixin.client;
 
-import com.deconstructedcube.non_identity2_bridge.util.Identity2ActorHelper;
+import com.deconstructedcube.non_woodwalkers_bridge.util.WoodwalkersActorHelper;
 import com.nonid.client.NonDestroyedSkinClient;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,12 +17,12 @@ public abstract class NonDestroyedSkinClientMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$bypassMorphBaseTexture(
+    private static void non_woodwalkers_bridge$bypassMorphBaseTexture(
             LivingEntity entity,
             Identifier currentBaseTexture,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (Identity2ActorHelper.getMorph(entity) != null) {
+        if (WoodwalkersActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(null);
         }
     }
@@ -32,11 +32,11 @@ public abstract class NonDestroyedSkinClientMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$bypassMorphOverlayTexture(
+    private static void non_woodwalkers_bridge$bypassMorphOverlayTexture(
             LivingEntity entity,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (Identity2ActorHelper.getMorph(entity) != null) {
+        if (WoodwalkersActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(null);
         }
     }
@@ -46,12 +46,12 @@ public abstract class NonDestroyedSkinClientMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$bypassMorphRenderedTexture(
+    private static void non_woodwalkers_bridge$bypassMorphRenderedTexture(
             LivingEntity entity,
             Identifier renderedTexture,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (Identity2ActorHelper.getMorph(entity) != null) {
+        if (WoodwalkersActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(renderedTexture);
         }
     }
@@ -61,13 +61,13 @@ public abstract class NonDestroyedSkinClientMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$bypassMorphPlayerModelTexture(
+    private static void non_woodwalkers_bridge$bypassMorphPlayerModelTexture(
             LivingEntity entity,
             Identifier renderedTexture,
             NonDestroyedSkinClient.CpmTextureSource cpmTextureSource,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (Identity2ActorHelper.getMorph(entity) != null) {
+        if (WoodwalkersActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(renderedTexture);
         }
     }

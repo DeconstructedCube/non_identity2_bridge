@@ -12,6 +12,7 @@ base {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 	maven {
 		name = "Fabric"
@@ -43,9 +44,9 @@ dependencies {
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}"
 
 	modImplementation files('libs/needsofnature-1.5.11.21.11.jar')
-	modImplementation files('libs/1.21.11-identity2-fabric-2.2.4.1.jar')
+	modImplementation "dev.tocraft:craftedcore-fabric:7.0.0+1.21.11"
+	modImplementation "dev.tocraft:walkers-fabric:7.2.7+1.21.11"
 }
-
 checkstyle {
 	toolVersion = '10.21.4'
 	configFile = file("config/checkstyle/checkstyle.xml")

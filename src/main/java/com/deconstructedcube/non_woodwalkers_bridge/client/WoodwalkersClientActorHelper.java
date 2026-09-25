@@ -1,4 +1,4 @@
-package com.deconstructedcube.non_identity2_bridge.client;
+package com.deconstructedcube.non_woodwalkers_bridge.client;
 
 import com.nonid.internal.animation.client.runtime.ClientAnimationRuntime;
 import com.nonid.internal.animation.network.AnimationStageInfo;
@@ -22,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
-public final class Identity2ClientActorHelper {
+public final class WoodwalkersClientActorHelper {
 
-    private Identity2ClientActorHelper() {
+    private WoodwalkersClientActorHelper() {
     }
 
     /**

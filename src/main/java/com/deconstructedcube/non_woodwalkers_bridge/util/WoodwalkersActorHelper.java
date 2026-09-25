@@ -1,8 +1,8 @@
-package com.deconstructedcube.non_identity2_bridge.util;
+package com.deconstructedcube.non_woodwalkers_bridge.util;
 
-import com.deconstructedcube.non_identity2_bridge.client.Identity2ClientActorHelper;
+import com.deconstructedcube.non_woodwalkers_bridge.client.WoodwalkersClientActorHelper;
 import com.nonid.GenderHolder;
-import net.Gabou.identity2.api.IdentityApi;
+import dev.tocraft.walkers.api.PlayerShape;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,6 +10,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
@@ -17,33 +18,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class Identity2ActorHelper {
-
-    public static final Identifier PLAYER_TYPE_ID = Identifier.withDefaultNamespace("player");
+public final class WoodwalkersActorHelper {
 
     private record TagCacheKey(EntityType<?> type, int genderMask, boolean isLiving) {
     }
 
     private static final Map<TagCacheKey, Set<String>> TAG_CACHE = new ConcurrentHashMap<>();
 
-    private Identity2ActorHelper() {
+    private WoodwalkersActorHelper() {
     }
 
     @Nullable
     public static Entity getMorph(@Nullable Entity entity) {
-        if (entity == null) {
-            return null;
-        }
-        Entity morph = IdentityApi.getCurrentMorph(entity);
-        if (morph != null) {
-            return morph;
-        }
-        Identifier morphId = IdentityApi.getCurrentMorphId(entity);
-        if (morphId != null && !PLAYER_TYPE_ID.equals(morphId)) {
-            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(morphId).orElse(null);
-            if (type != null && entity.level() != null) {
-                return type.create(entity.level(), net.minecraft.world.entity.EntitySpawnReason.LOAD);
-            }
+        if (entity instanceof Player player) {
+            return PlayerShape.getCurrentShape(player);
         }
         return null;
     }
@@ -52,13 +40,6 @@ public final class Identity2ActorHelper {
         Entity morph = getMorph(entity);
         if (morph != null) {
             return morph.getType();
-        }
-        Identifier morphId = IdentityApi.getCurrentMorphId(entity);
-        if (morphId != null && !PLAYER_TYPE_ID.equals(morphId)) {
-            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(morphId).orElse(null);
-            if (type != null) {
-                return type;
-            }
         }
         return entity.getType();
     }
@@ -81,7 +62,7 @@ public final class Identity2ActorHelper {
         Entity morph = getMorph(entity);
         boolean isLiving = morph instanceof LivingEntity || entity instanceof LivingEntity;
         TagCacheKey key = new TagCacheKey(morphType, mask, isLiving);
-        return TAG_CACHE.computeIfAbsent(key, Identity2ActorHelper::buildMorphActorTags);
+        return TAG_CACHE.computeIfAbsent(key, WoodwalkersActorHelper::buildMorphActorTags);
     }
 
     private static Set<String> buildMorphActorTags(TagCacheKey key) {
@@ -121,10 +102,10 @@ public final class Identity2ActorHelper {
         }
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            return Identity2ClientActorHelper.resolveMorphNativeTexture(morph, null);
+            return WoodwalkersClientActorHelper.resolveMorphNativeTexture(morph, null);
         }
 
-        return Identity2ClientActorHelper.fallbackDefaultMobTexture(livingMorph.getType());
+        return WoodwalkersClientActorHelper.fallbackDefaultMobTexture(livingMorph.getType());
     }
 
     public static boolean isNonPlayerTexture(Identifier id) {

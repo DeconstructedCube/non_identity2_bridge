@@ -1,7 +1,7 @@
-package com.deconstructedcube.non_identity2_bridge.mixin.client;
+package com.deconstructedcube.non_woodwalkers_bridge.mixin.client;
 
-import com.deconstructedcube.non_identity2_bridge.client.Identity2ClientActorHelper;
-import com.deconstructedcube.non_identity2_bridge.util.Identity2ActorHelper;
+import com.deconstructedcube.non_woodwalkers_bridge.client.WoodwalkersClientActorHelper;
+import com.deconstructedcube.non_woodwalkers_bridge.util.WoodwalkersActorHelper;
 import com.nonid.internal.animation.client.render.AnimationRenderStateAccess;
 import com.nonid.internal.animation.client.render.gecko.GeckoReplacedRender;
 import com.nonid.internal.animation.util.EntityVariants;
@@ -25,14 +25,14 @@ public abstract class GeckoReplacedRenderMixin {
             method = "prepare",
             at = @At("HEAD")
     )
-    private static void non_identity2_bridge$fixMorphedEntityTypeIdInPrepare(
+    private static void non_woodwalkers_bridge$fixMorphedEntityTypeIdInPrepare(
             LivingEntity entity,
             LivingEntityRenderState state,
             float tickDelta,
             CallbackInfo ci
     ) {
         if (state instanceof AnimationRenderStateAccess access) {
-            Entity morph = Identity2ActorHelper.getMorph(entity);
+            Entity morph = WoodwalkersActorHelper.getMorph(entity);
             if (morph != null) {
                 // 在 NoN 开始寻找动作的前一毫秒，将其底层身份伪装为真正的变身动物
                 // 这彻底避免了 1.0.8 中由于二次调用 prepare 导致的 GeckoLib 动画控制器重置冻结问题
@@ -48,21 +48,17 @@ public abstract class GeckoReplacedRenderMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$guardNonPlayerActorTexture(
+    private static void non_woodwalkers_bridge$guardNonPlayerActorTexture(
             LivingEntity entity,
             LivingEntityRenderState renderState,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        Identifier entityTypeId = null;
-        if (renderState instanceof AnimationRenderStateAccess access) {
-            entityTypeId = access.afw$getEntityTypeId();
-        }
-        Entity morph = Identity2ActorHelper.getMorph(entity);
+        Entity morph = WoodwalkersActorHelper.getMorph(entity);
 
         // 核心准则：非人类角色绝对禁止赋予玩家皮肤！
         // 自动将变身形态委派给原版渲染管线提取原生贴图（支持变种与材质包），无需任何手动路径硬编码
         if (morph != null) {
-            Identifier nativeTexture = Identity2ClientActorHelper.resolveMorphNativeTexture(morph, renderState);
+            Identifier nativeTexture = WoodwalkersClientActorHelper.resolveMorphNativeTexture(morph, renderState);
             if (nativeTexture != null) {
                 cir.setReturnValue(nativeTexture);
             }
@@ -76,8 +72,8 @@ public abstract class GeckoReplacedRenderMixin {
                     target = "Lcom/nonid/internal/animation/util/EntityVariants;resolveVariant(Lnet/minecraft/world/entity/Entity;)Ljava/lang/String;"
             )
     )
-    private static String non_identity2_bridge$redirectPreferredModelVariant(Entity entity) {
-        Entity morph = Identity2ActorHelper.getMorph(entity);
+    private static String non_woodwalkers_bridge$redirectPreferredModelVariant(Entity entity) {
+        Entity morph = WoodwalkersActorHelper.getMorph(entity);
         return EntityVariants.resolveVariant(morph != null ? morph : entity);
     }
 }

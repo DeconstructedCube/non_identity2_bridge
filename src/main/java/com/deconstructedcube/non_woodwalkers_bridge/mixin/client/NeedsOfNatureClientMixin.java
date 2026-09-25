@@ -1,6 +1,6 @@
-package com.deconstructedcube.non_identity2_bridge.mixin.client;
+package com.deconstructedcube.non_woodwalkers_bridge.mixin.client;
 
-import com.deconstructedcube.non_identity2_bridge.util.Identity2ActorHelper;
+import com.deconstructedcube.non_woodwalkers_bridge.util.WoodwalkersActorHelper;
 import com.nonid.NeedsOfNatureClient;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,12 +20,12 @@ public abstract class NeedsOfNatureClientMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$bypassMorphedDestroyedSkin(
+    private static void non_woodwalkers_bridge$bypassMorphedDestroyedSkin(
             LivingEntity entity,
             Identifier currentTexture,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (Identity2ActorHelper.getMorph(entity) != null) {
+        if (WoodwalkersActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(currentTexture);
         }
     }
@@ -35,11 +35,11 @@ public abstract class NeedsOfNatureClientMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void non_identity2_bridge$bypassMorphedSkinPartHiding(
+    private static void non_woodwalkers_bridge$bypassMorphedSkinPartHiding(
             LivingEntity entity,
             CallbackInfoReturnable<Map<String, Set<Integer>>> cir
     ) {
-        if (Identity2ActorHelper.getMorph(entity) != null) {
+        if (WoodwalkersActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(Map.of());
         }
     }

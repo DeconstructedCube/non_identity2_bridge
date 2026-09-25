@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "com.deconstructedcube.non_identity2_bridge.mixin",
+	"package": "com.deconstructedcube.non_woodwalkers_bridge.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"MatchActorMixin",

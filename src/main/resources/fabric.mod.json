@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "non_identity2_bridge",
+	"id": "non_woodwalkers_bridge",
 	"version": "${version}",
-	"name": "Needs of Nature x Identity2 Bridge",
-	"description": "Seamless compatibility between Needs of Nature animations and Identity2 morphs.",
+	"name": "Needs of Nature x Woodwalkers Bridge",
+	"description": "Seamless compatibility between Needs of Nature animations and Woodwalkers morphs.",
 	"authors": [
 		"DeconstructedCube"
 	],
@@ -11,11 +11,11 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.deconstructedcube.non_identity2_bridge.NonIdentity2Bridge"
+			"com.deconstructedcube.non_woodwalkers_bridge.NonWoodwalkersBridge"
 		]
 	},
 	"mixins": [
-		"non_identity2_bridge.mixins.json"
+		"non_woodwalkers_bridge.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.18.2",
@@ -23,6 +23,6 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"needsofnature": ">=1.5.0",
-		"identity2": ">=2.2.0"
+		"walkers": ">=7.0.0"
 	}
 }

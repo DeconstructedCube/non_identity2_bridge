@@ -1,6 +1,6 @@
-package com.deconstructedcube.non_identity2_bridge.mixin;
+package com.deconstructedcube.non_woodwalkers_bridge.mixin;
 
-import com.deconstructedcube.non_identity2_bridge.util.Identity2ActorHelper;
+import com.deconstructedcube.non_woodwalkers_bridge.util.WoodwalkersActorHelper;
 import com.nonid.internal.animation.server.ServerAnimationController;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -18,7 +18,7 @@ public abstract class ServerAnimationControllerMixin {
                     target = "Lnet/minecraft/world/entity/Entity;getType()Lnet/minecraft/world/entity/EntityType;"
             )
     )
-    private static EntityType<?> non_identity2_bridge$redirectResolveModelRootsEntityType(Entity actor) {
-        return Identity2ActorHelper.getEffectiveEntityType(actor);
+    private static EntityType<?> non_woodwalkers_bridge$redirectResolveModelRootsEntityType(Entity actor) {
+        return WoodwalkersActorHelper.getEffectiveEntityType(actor);
     }
 }
