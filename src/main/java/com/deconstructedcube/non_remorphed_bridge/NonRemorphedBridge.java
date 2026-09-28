@@ -18,6 +18,22 @@ public final class NonRemorphedBridge implements ModInitializer {
         LOGGER.info("[NoN x ReMorphed Bridge] Initializing bridge module...");
         NonActorEvents.PROVIDE.register(RemorphedActorHelper::provideMorphActorTags);
         LOGGER.info("[NoN x ReMorphed Bridge] Registered actor tag provider.");
+
+        // Allow morphed players to initiate action invitations on compatible living mobs
+        net.fabricmc.fabric.api.event.player.UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (!world.isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND
+                    || !player.getMainHandItem().isEmpty() || player.isSpectator()
+                    || entity == null || entity.isRemoved() || entity.getUUID().equals(player.getUUID())) {
+                return net.minecraft.world.InteractionResult.PASS;
+            }
+            if (player.isShiftKeyDown() && entity instanceof net.minecraft.world.entity.LivingEntity
+                    && !(entity instanceof net.minecraft.world.entity.player.Player)
+                    && RemorphedActorHelper.getMorph(player) != null) {
+                return net.minecraft.world.InteractionResult.SUCCESS;
+            }
+            return net.minecraft.world.InteractionResult.PASS;
+        });
+        LOGGER.info("[NoN x ReMorphed Bridge] Registered morphed mob action invitation handler.");
     }
 
     private static void verifyHardDependencies() {

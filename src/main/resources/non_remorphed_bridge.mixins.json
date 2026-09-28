@@ -1,10 +1,12 @@
 {
 	"required": true,
 	"package": "com.deconstructedcube.non_remorphed_bridge.mixin",
+	"refmap": "non_remorphed_bridge.refmap.json",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"MatchActorMixin",
 		"NeedsOfNatureMixin",
+		"NonPlayerInteractionSystemMixin",
 		"ServerAnimationControllerMixin"
 	],
 	"client": [

@@ -1,6 +1,7 @@
 tasks.register('checkMixins') {
     group = 'verification'
-    description = 'Statically audits all Mixin annotations against Minecraft 1.21.11 bytecode.'
+    description = 'Statically audits all Mixin bytecode against Minecraft 1.21.11 bytecode.'
+    dependsOn 'compileJava'
 
     doLast {
         dev.tocraft.tools.MixinAuditor.audit(project.projectDir, project.name)
