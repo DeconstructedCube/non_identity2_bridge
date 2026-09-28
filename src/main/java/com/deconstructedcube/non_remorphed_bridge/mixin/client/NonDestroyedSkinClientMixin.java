@@ -22,7 +22,7 @@ public abstract class NonDestroyedSkinClientMixin {
             Identifier currentBaseTexture,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (RemorphedActorHelper.getMorph(entity) != null) {
+        if (!(entity instanceof net.minecraft.world.entity.player.Player) || RemorphedActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(null);
         }
     }
@@ -36,7 +36,7 @@ public abstract class NonDestroyedSkinClientMixin {
             LivingEntity entity,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (RemorphedActorHelper.getMorph(entity) != null) {
+        if (!(entity instanceof net.minecraft.world.entity.player.Player) || RemorphedActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(null);
         }
     }

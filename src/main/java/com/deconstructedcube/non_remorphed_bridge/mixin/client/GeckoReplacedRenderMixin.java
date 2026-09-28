@@ -56,6 +56,13 @@ public abstract class GeckoReplacedRenderMixin {
             Identifier nativeTexture = RemorphedClientActorHelper.resolveMorphNativeTexture(morph, renderState);
             if (nativeTexture != null) {
                 cir.setReturnValue(nativeTexture);
+                return;
+            }
+        }
+        if (!(entity instanceof net.minecraft.world.entity.player.Player)) {
+            Identifier nativeTexture = RemorphedClientActorHelper.resolveMorphNativeTexture(entity, renderState);
+            if (nativeTexture != null) {
+                cir.setReturnValue(nativeTexture);
             }
         }
     }

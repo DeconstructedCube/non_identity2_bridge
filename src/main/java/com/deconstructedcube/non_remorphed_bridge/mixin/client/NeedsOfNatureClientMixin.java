@@ -25,7 +25,7 @@ public abstract class NeedsOfNatureClientMixin {
             Identifier currentTexture,
             CallbackInfoReturnable<Identifier> cir
     ) {
-        if (RemorphedActorHelper.getMorph(entity) != null) {
+        if (!(entity instanceof net.minecraft.world.entity.player.Player) || RemorphedActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(currentTexture);
         }
     }
@@ -39,7 +39,7 @@ public abstract class NeedsOfNatureClientMixin {
             LivingEntity entity,
             CallbackInfoReturnable<Map<String, Set<Integer>>> cir
     ) {
-        if (RemorphedActorHelper.getMorph(entity) != null) {
+        if (!(entity instanceof net.minecraft.world.entity.player.Player) || RemorphedActorHelper.getMorph(entity) != null) {
             cir.setReturnValue(Map.of());
         }
     }
