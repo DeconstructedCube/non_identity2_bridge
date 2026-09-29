@@ -12,24 +12,44 @@
 
 A Fabric compatibility bridge mod providing seamless integration between **Needs of Nature (NoN)** and **ReMorphed** on Minecraft 1.21.11.
 
-## Features
+## Architecture
 
-- **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to match the active morph rather than `minecraft:player`, ensuring appropriate animal animation clips (e.g. `p1_fox`) are selected.
-- **Texture Resolution**: Resolves native morph textures directly via runtime render state (including 1.21.11 wolf, cat, and farm animal variants).
-- **Render State Correction**: Bypasses NoN player skin overrides and cube-hiding routines for morphed players, avoiding human skin textures on animal geometry.
-- **Actor Tags Cache**: Caches morph actor tags (`actor.morph`, `actor.feral`, gender tags) to avoid allocation overhead during tick scans.
-- **Mob Action Invitation GUI**: Supports interactive action selection when interacting with compatible mobs while morphed, with automatic consent resolution.
-
-## Architecture Pipeline
+The bridge operates across four subsystems to connect ReMorphed's morphing state with Needs of Nature's animation and physiological systems:
 
 ```mermaid
 graph TD
-    Player[Morphed Player] --> |MatchActorMixin| Type[Redirect Entity Type & Variant]
-    Type --> |RemorphedActorHelper| Tags[Inject Actor Tags Cache]
-    Tags --> |ServerAnimationController| Broadcast[Broadcast Animal GeckoLib Model]
-    Broadcast --> |GeckoReplacedRenderMixin| Texture[Resolve Native Morph Texture]
-    Texture --> |NeedsOfNatureClientMixin| Render[Bypass Human Skin Overrides]
+    subgraph EntityMatching [1. Entity Matching & Actor Tagging]
+        A[Morphed Player] --> B[MatchActorMixin]
+        B -->|Redirect getType / isBaby / variant| C[RemorphedActorHelper]
+        C -->|Inject tags: actor.morph, actor.feral, gender| D[Actor Tags Cache]
+    end
+
+    subgraph AnimationLayer [2. Animation & Model Selection]
+        D --> E[Server Animation Controller]
+        E -->|Select animal clips e.g. wolfmwolf| F[GeckoLib Model Replacement]
+        F -->|Broadcast Animation State| G[Client Sync]
+    end
+
+    subgraph RenderPipeline [3. Texture & Render Pipeline]
+        G --> H[GeckoReplacedRenderMixin]
+        H -->|Resolve LivingEntityRenderer texture| I[Native Morph Texture]
+        I --> J[NeedsOfNatureClientMixin]
+        J -->|Bypass human skin overrides & cube-hiding| K[Final Rendered Morph]
+    end
+
+    subgraph InteractionSystem [4. Interaction & Consent]
+        L[Player Input: Sneak + Right-Click] --> M[Animation Selection GUI]
+        M -->|Select Action| N[Auto-Consent Dispatcher]
+        N -->|Initiate Sequence| E
+    end
 ```
+
+### Subsystems Breakdown
+
+- **Entity Matching Layer**: Intercepts entity queries (`getType`, `isBaby`, `EntityVariants`) at the mixin level to supply active morph data instead of the default `minecraft:player` type, enabling proper animal animation clip selection.
+- **Actor Tagging & Physiology**: Injects cached actor tags (`actor.morph`, `actor.feral`, gender traits) into NoN's physiology scanner, ensuring correct liquid donor attribution and energy management.
+- **Render Pipeline**: Uses runtime render states to query native vanilla mob textures (including 1.21.11 wolf, cat, and farm animal variants) while bypassing human skin overrides and destroyed-skin cube-hiding routines.
+- **Interactive Action GUI**: Displays available animation actions when interacting with compatible mobs while morphed, dispatching automated consent to bypass player-to-player waiting states.
 
 ## Requirements
 
