@@ -154,7 +154,7 @@ public class MixinAuditor {
         Path loomCache = Paths.get(home, ".gradle/caches/fabric-loom/minecraftMaven/net/minecraft/minecraft-merged");
         if (Files.exists(loomCache)) {
             try (var stream = Files.walk(loomCache)) {
-                stream.filter(p -> p.toString().endsWith(".jar") && !p.toString().contains("intermediary") && p.toString().contains("loom.mappings"))
+                stream.filter(p -> p.toString().endsWith(".jar") && !p.toString().contains("intermediary") && p.toString().contains("loom.mappings") && p.toString().contains("1.21.11"))
                       .map(Path::toFile)
                       .forEach(jars::add);
             }
