@@ -1,7 +1,7 @@
 # Needs of Nature × ReMorphed Bridge (`non_remorphed_bridge`)
 
 <div align="center">
-  <a href="https://github.com/DeconstructedCube/non_identity2_bridge/releases/latest"><img src="https://img.shields.io/github/v/release/DeconstructedCube/non_identity2_bridge?color=blue" alt="Latest Release"></a>
+  <a href="https://github.com/DeconstructedCube/non_remorphed_bridge/releases/latest"><img src="https://img.shields.io/github/v/release/DeconstructedCube/non_remorphed_bridge?color=blue" alt="Latest Release"></a>
   <a href="https://minecraft.net/"><img src="https://img.shields.io/badge/Minecraft-1.21.11-brightgreen.svg" alt="Minecraft Version"></a>
   <a href="https://fabricmc.net/"><img src="https://img.shields.io/badge/Fabric%20Loader-%3E%3D0.18.2-blue.svg" alt="Fabric Loader"></a>
   <a href="https://adoptium.net/"><img src="https://img.shields.io/badge/Java-21-orange.svg" alt="Java"></a>
@@ -10,17 +10,15 @@
 
 ---
 
-A Fabric compatibility layer between **Needs of Nature (NoN)** and **ReMorphed**.
+A Fabric compatibility bridge mod providing seamless integration between **Needs of Nature (NoN)** and **ReMorphed** on Minecraft 1.21.11.
 
-## Technical Details
+## Features
 
-This bridge resolves conflicts between NoN's player-centric animation and rendering assumptions and ReMorphed's morph mechanics:
-
-- 🔄 **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to return the morph's data instead of `minecraft:player`. This ensures NoN assigns animal animation clips (e.g., `p1_fox`) instead of human clips during multi-actor animations.
-- 🖼️ **Texture Resolution**: Directly queries the vanilla `LivingEntityRenderer.getTextureLocation` via runtime render state for morph textures (including variants and resource packs) with zero reflection and zero deceptive fallbacks.
-- 🛑 **Render State Correction**: Bypasses NoN's `resolveDestroyedSkinBaseTexture` and skin-part cube-hiding for morphed players, preventing human textures from being mapped onto animal models.
-- 💾 **Actor Tags Cache**: Implements a concurrent cache for morph actor tags (`actor.morph`, `actor.feral`, gender traits) to prevent allocation overhead during tick scans.
-- ⚙️ **Mixin Compliance**: Targets standard Minecraft classes and public classes with deterministic ordering (`priority = 1500`) to minimize mixin conflicts.
+- **Entity Matching**: Intercepts `entity.getType()`, `isBaby()`, and `EntityVariants.resolveVariant()` to match the active morph rather than `minecraft:player`, ensuring appropriate animal animation clips (e.g. `p1_fox`) are selected.
+- **Texture Resolution**: Resolves native morph textures directly via runtime render state (including 1.21.11 wolf, cat, and farm animal variants).
+- **Render State Correction**: Bypasses NoN player skin overrides and cube-hiding routines for morphed players, avoiding human skin textures on animal geometry.
+- **Actor Tags Cache**: Caches morph actor tags (`actor.morph`, `actor.feral`, gender tags) to avoid allocation overhead during tick scans.
+- **Mob Action Invitation GUI**: Supports interactive action selection when interacting with compatible mobs while morphed, with automatic consent resolution.
 
 ## Architecture Pipeline
 
@@ -33,68 +31,24 @@ graph TD
     Texture --> |NeedsOfNatureClientMixin| Render[Bypass Human Skin Overrides]
 ```
 
----
+## Requirements
 
-## 📦 Requirements & Environment Matrix
+- **Minecraft**: `1.21.11`
+- **Fabric Loader**: `>= 0.18.2`
+- **Fabric API**: `0.141.6+1.21.11`
+- **Java**: `21`
+- **GeckoLib**: `5.4.5` (Fabric)
+- **Needs of Nature (NoN)**: `>= 1.5.0`
+- **ReMorphed**: `>= 7.0.0` (along with Walkers, CraftedCore, SkinShifter)
 
-| Component | Version | Role / Upstream Baseline |
-| :--- | :--- | :--- |
-| **Minecraft** | `1.21.11` | Target Game Runtime (Fabric) |
-| **Fabric Loader** | `>=0.18.2` | Mod Loader |
-| **Fabric API** | `0.141.6+1.21.11` | Core Fabric Hooks |
-| **Java** | `21` (OpenJDK) | Compilation & Execution Target |
-| **GeckoLib** | `5.4.5` | Animation Engine |
-| **Needs of Nature (NoN)** | `1.5.11` | Animation & Physiology Core (`needsofnature-1.5.11.21.11.jar`) |
-| **NoN Default Pack** | `v1.5.1` | Community Animation & Content Pack (`afw_animdefs`) |
-| **ReMorphed** | `7.1.1+1.21.11` | Advanced Morph System (Backported from upstream `8.1` on Minecraft 26.2) |
-| **Woodwalkers** | `7.2.7+1.21.11` | Morph Foundation Engine (Backported from upstream `8.3.2` on Minecraft 26.2) |
-| **CraftedCore** | `7.0.0+1.21.11` | Multi-Loader Utility Lib (Backported from upstream `8.2.1` on Minecraft 26.2) |
-| **SkinShifter** | `2.0.0+1.21.11` | Dynamic Skin Swapping (Backported from upstream `3.2.0` on Minecraft 26.2) |
-| **non_remorphed_bridge**| `1.1.2+1.21.11` | Compatibility Layer between NoN and ReMorphed |
+## Building from Source
 
----
-
-## 🧪 Verification & Test Suite Checklist
-
-### 1. Animation Matching & 1.21.11 Variant Rendering
-- [ ] **Wolf (9 Variants & Collar)**: Verify that all 1.21.11 wolf variants (ashen, black, rusty, snowy, etc.) and dyed collars render without missing textures in animal animations (`wolfmplayer`, `wolfmwolf`).
-- [ ] **Pig & Cow (Farm Animals)**: Verify Temperate/Warm/Cold pig and cow textures render accurately in `pigmplayer`, `pigmpig`, and quadruped interaction clips without texture corruption.
-- [ ] **Cat & Axolotl**: Verify that multi-color registry variants render accurately in `catmplayer` without reverting to default skins.
-- [ ] **Sheep & Fox**: Verify that quadruped interaction/mating animations (`sheepmplayer`, `foxmplayer`) are selected correctly instead of falling back to human animations.
-- [ ] **Baby Mobs**: Verify that baby shapes (e.g., baby rabbit/baby wolf) enforce baby check constraints and filter out incompatible animations.
-- [ ] **Hostile & Humanoid Mobs (Zombie, Skeleton, Enderman)**: Verify attack/defeated animations (`zombiemplayer`, `skeletonmplayer`, `endermanmplayer`) and confirm camera orientation decoupling operates normally.
-- [ ] **Resource Packs**: Verify that custom high-resolution mob textures are loaded dynamically by the renderer.
-### 2. Physiology, Liquid Attribution & Horse Collector
-- [ ] **Horse Liquid Collector (Equine Morph)**: Verify that morphed stallions (Horse, Donkey, Mule) successfully fill the collector on peak and emit full drip particles.
-- [ ] **Collector Bottling**: Verify that right-clicking a full collector with an empty glass bottle yields a `Horse Liquid Bottle`.
-- [ ] **Liquid Donor Attribution**: Verify that peak liquid produced by morphed entities (e.g., wolf, horse) records the correct entity ID in the receiver's tank.
-- [ ] **Player Tank Extraction**: Verify that sneaking and right-clicking with a glass bottle extracts the morph's specific entity liquid bottle.
-- [ ] **Bee (Honey Special Composition)**: Verify that liquid produced by bee morphs is categorized under `HONEY`.
-- [ ] **Destroyed Skin Prevention**: Verify that damaged/torn skin stages on morphed players do not corrupt animal geometry or apply human skin overlays.
-
-### 3. Mob AI, Pathfinding & Natural Interactions
-- [ ] **Prey Hunt Tracking**: Verify that wild wolves/foxes actively pathfind and hunt players morphed as sheep or rabbits.
-- [ ] **Predator Fear/Flee**: Verify that creepers actively flee from players morphed as cats or ocelots.
-- [ ] **Hostile Camouflage**: Verify that zombies and standard hostiles ignore players morphed as matching monsters.
-- [ ] **Animal In-Love Interaction**: Verify that in-love animals (e.g., cows) approach a compatible morphed player and trigger breeding animations.
-
-### 4. Multi-Player & Dual-Actor Interactions
-- [ ] **Morphed Player + Human Player**: Verify animal-to-human interaction animations and liquid injection attribution.
-- [ ] **Morphed Player + Morphed Player (Same Species)**: Verify species-specific animations (e.g., `wolfmwolf`) and confirm independent orientation decoupling for both players.
-- [ ] **Morphed Player + Morphed Player (Cross-Species)**: Verify donkey + horse cross-breeding mechanics and mule offspring conception.
-- [ ] **SkinShifter Morph + Human Player**: Verify that player skin morphs accurately display target player skins across human animation sequences.
-
----
-
-## 🚀 Building from Source
 ```bash
-git clone https://github.com/DeconstructedCube/non_identity2_bridge.git
-cd non_identity2_bridge
 ./gradlew build
 ```
 
----
+Compiled JARs will be generated in `build/libs/`.
 
-## 📜 License
+## License
 
-This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE).
+This project is licensed under the [GNU General Public License v3.0 (GPL-3.0-or-later)](LICENSE).
